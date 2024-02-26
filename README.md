@@ -2,8 +2,8 @@
 Deliverable 1A: Sprint 1 Goals
 1. GUI with all chess pieces and board - Hard(maybe?) - Essential
 2. Classes - Medium/Hard - Essential
-  Pieces(all of these pieces will have different classes)
-    Pawn
+  - Pieces(all of these pieces will have different classes)
+    - Pawn
     Rook
     Knight
     Bishop
