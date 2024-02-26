@@ -1,7 +1,6 @@
 import pygame
 import sys
 
-
 class Board:
     def __init__(self, width):
         assert width > 500
