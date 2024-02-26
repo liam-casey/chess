@@ -1,13 +1,14 @@
 import pygame
 import sys
+from square import Square
 
 class Board:
-    def __init__(self, width):
-        assert width > 500
-        self.size = (width, width)
+    def __init__(self):
+        self.width = 800
+        self.size = (self.width, self.width)
         self.screen = screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Chess")
-        self.board = pygame.Surface((width - 100, width - 100))
+        self.board = pygame.Surface((self.width - 100, self.width - 100))
         self.board.fill((255, 206, 158))
         self.draw()
 
