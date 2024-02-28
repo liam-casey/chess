@@ -23,7 +23,7 @@ def main():
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
     # game state class, keeps track of what how the game looks currently
-    gameState = GameState()
+    gameState = GameState(IMAGES)
     # calls load images
     loadImages()
     running = True
