@@ -1,7 +1,6 @@
 
 
 class Piece():
-    def __init__(self,location, moves, image):
+    def __init__(self,location, image):
         self.location = location
-        self.moves = moves
         self.image = image
