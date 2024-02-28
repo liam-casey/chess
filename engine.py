@@ -20,4 +20,9 @@ class GameState:
             ]
         # white goes first
         self.whiteToMove = True
+    
+    def Move(self, startPos, endPos):
+        piece = self.board[startPos[0]][startPos[1]]
+        # check to see if the piece is the right color
+        
         

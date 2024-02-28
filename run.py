@@ -3,9 +3,10 @@ from engine import GameState
 
 
 # constants
-WIDTH = HEIGHT = 512 # size of window
+WIDTH = 600
+HEIGHT = 512 # size of window
 DIMENSION = 8 # size of board
-SQ_SIZE = HEIGHT / DIMENSION # size of each square
+SQ_SIZE = HEIGHT // DIMENSION # size of each square
 MAX_FPS = 60 # max frames per second
 IMAGES = {} # dictionary to keep all images
 
@@ -36,8 +37,14 @@ def main():
             # mouse button
             if event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos()
-                col = location[0]/ SQ_SIZE
-                row = location[1] / SQ_SIZE
+                col = location[0]// SQ_SIZE
+                row = location[1] // SQ_SIZE
+                print(str(row) + ":" + str(col))
+            if event.type == pygame.MOUSEBUTTONUP:
+                location = pygame.mouse.get_pos()
+                col = location[0]// SQ_SIZE
+                row = location[1] // SQ_SIZE
+                print(str(row) + ":" + str(col))
         # draw
         drawGameState(screen, gameState)
         # frame rate
