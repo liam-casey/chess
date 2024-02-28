@@ -6,23 +6,18 @@ from board import Board
 # The board can probably be initialized in its own seperate board class
 # the pieces themselves can also probably be put in a seperate class as well, which would be initialized in the board class
 class GameState:
-    def __init__(self):
+    def __init__(self, images):
         # this creates a starting board, the "" are empty spaces
-        self.board = [
-            ["black_rook", "black_knight", "black_bishop", "black_queen", "black_king", "black_bishop", "black_knight", "black_rook"],
-            ["black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn"],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn"],
-            ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"]
-            ]
+        self.board = Board(images)
         # white goes first
         self.whiteToMove = True
     
     def Move(self, startPos, endPos):
         piece = self.board[startPos[0]][startPos[1]]
         # check to see if the piece is the right color
-        
-        
+    
+
+    def checkCheckMate():
+        pass
+
+    
