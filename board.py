@@ -24,3 +24,12 @@ class Board:
                 piece = self.board[row][col]
                 if piece != "":
                     screen.blit(self.IMAGES[piece], pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
+    
+    def getPiece(self, startPos):
+        return self.board[startPos[0]][startPos[1]]
+    
+    def updateBoard(self, startPos, endPos):
+        piece = self.board[startPos[0]][startPos[1]]
+        self.board[startPos[0]][startPos[1]] = ""
+        self.board[endPos[0]][endPos[1]] = piece
+        
