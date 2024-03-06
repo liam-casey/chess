@@ -24,6 +24,11 @@ class Rook(Piece):
             self.has_moved = True
             self.location = new_location
             return True
+
+    # function takes in position after a piece has been moved and reassigns the ending location
+    # as the current location
+    def update_location(self, endPos):
+        self.location = endPos
     
 
 
