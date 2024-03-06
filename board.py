@@ -13,12 +13,12 @@ class Board:
         self.IMAGES = images
         # The pieces in the board should no longer be strings, they should be a piece object 
         black_rook1 = Rook((0,0), self.IMAGES["black_rook"], "black")
-        black_knigt1 = Knight((0,1), self.IMAGES["black_knight"], "black")
+        black_knight1 = Knight((0,1), self.IMAGES["black_knight"], "black")
         black_bishop1 = Bishop((0,2), self.IMAGES["black_bishop"], "black")
         black_queen = Queen((0,3), self.IMAGES["black_queen"], "black")
         black_king = King((0,4), self.IMAGES["black_king"], "black")
         black_bishop2 = Bishop((0,5), self.IMAGES["black_bishop"], "black")
-        black_knigt2 = Knight((0,6), self.IMAGES["black_knight"], "black")
+        black_knight2 = Knight((0,6), self.IMAGES["black_knight"], "black")
         black_rook2 = Rook((0,7), self.IMAGES["black_rook"], "black")
         black_pawn1 = Pawn((1, 0), self.IMAGES["black_pawn"], "black")
         black_pawn2 = Pawn((1, 1), self.IMAGES["black_pawn"], "black")
@@ -29,16 +29,31 @@ class Board:
         black_pawn7 = Pawn((1, 6), self.IMAGES["black_pawn"], "black")
         black_pawn8 = Pawn((1, 7), self.IMAGES["black_pawn"], "black")
 
-
+        white_rook1 = Rook((7,0), self.IMAGES["white_rook"], "white")
+        white_knight1 = Knight((7,1), self.IMAGES["white_knight"], "white")
+        white_bishop1 = Bishop((7,2), self.IMAGES["white_bishop"], "white")
+        white_queen = Queen((7,3), self.IMAGES["white_queen"], "white")
+        white_king = King((7,4), self.IMAGES["white_king"], "white")
+        white_bishop2 = Bishop((7,5), self.IMAGES["white_bishop"], "white")
+        white_knight2 = Knight((7,6), self.IMAGES["white_knight"], "white")
+        white_rook2 = Rook((7,7), self.IMAGES["white_rook"], "white")
+        white_pawn1 = Pawn((6, 0), self.IMAGES["white_pawn"], "white")
+        white_pawn2 = Pawn((6, 1), self.IMAGES["white_pawn"], "white")
+        white_pawn3 = Pawn((6, 2), self.IMAGES["white_pawn"], "white")
+        white_pawn4 = Pawn((6, 3), self.IMAGES["white_pawn"], "white")
+        white_pawn5 = Pawn((6, 4), self.IMAGES["white_pawn"], "white")
+        white_pawn6 = Pawn((6, 5), self.IMAGES["white_pawn"], "white")
+        white_pawn7 = Pawn((6, 6), self.IMAGES["white_pawn"], "white")
+        white_pawn8 = Pawn((6, 7), self.IMAGES["white_pawn"], "white")
         self.board = [
-            [black_rook1, black_knigt1, black_bishop1, black_queen, black_king, black_bishop2, black_knigt2, black_rook2],
+            [black_rook1, black_knight1, black_bishop1, black_queen, black_king, black_bishop2, black_knight2, black_rook2],
             [black_pawn1, black_pawn2, black_pawn3, black_pawn4, black_pawn5, black_pawn6, black_pawn7, black_pawn8],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
-            ["white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn"],
-            ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"]
+            [white_pawn1, white_pawn2, white_pawn3, white_pawn4, white_pawn5, white_pawn6, white_pawn7, white_pawn8],
+            [white_rook1, white_knight1, white_bishop1, white_queen, white_king, white_bishop2, white_knight2, white_rook2]
             ]
 
     # This function draws the board given the screen and screen size
@@ -56,7 +71,7 @@ class Board:
                 piece = self.board[row][col]
                 # if its not empty, draw the piece
                 if piece != "":
-                    screen.blit(self.IMAGES[piece], pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
+                    screen.blit(piece.getImage(), pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
     
     # returns what piece is on that space
     def getPiece(self, startPos):
@@ -66,7 +81,7 @@ class Board:
     def updateBoard(self, startPos, endPos):
         piece = self.board[startPos[0]][startPos[1]]
         # update pieces position field
-        # piece.updateLocation(endPos)
+        piece.updateLocation(endPos)
         self.board[startPos[0]][startPos[1]] = ""
         self.board[endPos[0]][endPos[1]] = piece
         
