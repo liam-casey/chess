@@ -5,3 +5,7 @@ class Piece():
         self.color = color
         self.location = location
         self.image = image
+
+    # returns image for each piece
+    def get_image(self, image):
+        return image
