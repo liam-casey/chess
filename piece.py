@@ -7,5 +7,8 @@ class Piece():
         self.image = image
 
     # returns image for each piece
-    def get_image(self, image):
-        return image
+    def get_image(self):
+        return self.image
+    
+    def get_color(self):
+        return self.color

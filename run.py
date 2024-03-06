@@ -22,10 +22,10 @@ def main():
     # timer for clock
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
-    # game state class, keeps track of what how the game looks currently
-    gameState = GameState(IMAGES)
     # calls load images
     loadImages()
+    # game state class, keeps track of what how the game looks currently
+    gameState = GameState(IMAGES)
     running = True
     squareSelected = ()
     # main driver of game, while loop that keeps the game running

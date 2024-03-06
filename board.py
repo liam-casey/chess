@@ -1,16 +1,16 @@
 import pygame
-from square import Square  
-from pieces import Rook
-from pieces import Pawn
-from pieces import Queen
-from pieces import King
-from pieces import Knight
-from pieces import Bishop
+from pieces.rook import Rook
+from pieces.pawn import Pawn
+from pieces.queen import Queen
+from pieces.king import King
+from pieces.knight import Knight
+from pieces.bishop import Bishop
 
 class Board:     
     def __init__(self, images):    
         # intialize all of pieces with the pieces in the pieces folder
         self.IMAGES = images
+
         # The pieces in the board should no longer be strings, they should be a piece object 
         black_rook1 = Rook((0,0), self.IMAGES["black_rook"], "black")
         black_knight1 = Knight((0,1), self.IMAGES["black_knight"], "black")
@@ -45,6 +45,7 @@ class Board:
         white_pawn6 = Pawn((6, 5), self.IMAGES["white_pawn"], "white")
         white_pawn7 = Pawn((6, 6), self.IMAGES["white_pawn"], "white")
         white_pawn8 = Pawn((6, 7), self.IMAGES["white_pawn"], "white")
+
         self.board = [
             [black_rook1, black_knight1, black_bishop1, black_queen, black_king, black_bishop2, black_knight2, black_rook2],
             [black_pawn1, black_pawn2, black_pawn3, black_pawn4, black_pawn5, black_pawn6, black_pawn7, black_pawn8],
@@ -71,7 +72,7 @@ class Board:
                 piece = self.board[row][col]
                 # if its not empty, draw the piece
                 if piece != "":
-                    screen.blit(piece.getImage(), pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
+                    screen.blit(piece.get_image(), pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
     
     # returns what piece is on that space
     def getPiece(self, startPos):
@@ -81,7 +82,7 @@ class Board:
     def updateBoard(self, startPos, endPos):
         piece = self.board[startPos[0]][startPos[1]]
         # update pieces position field
-        piece.updateLocation(endPos)
+        piece.update_location(endPos)
         self.board[startPos[0]][startPos[1]] = ""
         self.board[endPos[0]][endPos[1]] = piece
         

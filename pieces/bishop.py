@@ -5,7 +5,7 @@ class Bishop(Piece):
         super().__init__(location, image, color)
         self.has_moved = False
 
-    def check_move(self, new_location):
+    def move(self, new_location):
         # equation checks piece movements
         d_x = abs(new_location[0]) - self.location[0] 
         d_y = abs(new_location[1] - self.location[1])

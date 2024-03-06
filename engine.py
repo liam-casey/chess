@@ -27,19 +27,27 @@ class GameState:
         # if piece is the right color, do the move and update the board, otherwise print something out
         # TODO: IN the future, this if statement will change because instead of strings in the board there will be objects
         # Also call each pieces move functions to determine if the move is good
-        if self.whiteToMove and "white" in piece:
+        if self.whiteToMove and piece.get_color() == "white":
+            if piece.move(endPos):
             # if piece.move(endPos):
                 # Then do this stuff
-            self.board.updateBoard(startPos, endPos)
-            self.whiteToMove = False
-            return
-            # else 
+                self.board.updateBoard(startPos, endPos)
+                self.whiteToMove = False
+                return
+            # else print bad move and return
+            else:
                 # then print something out that says its not a good move
-        elif self.whiteToMove == False and "black" in piece:
+                print ("BAD MOVE")
+                return
+        elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
-            self.board.updateBoard(startPos, endPos)
-            self.whiteToMove = True
-            return
+            if piece.move(endPos):
+                self.board.updateBoard(startPos, endPos)
+                self.whiteToMove = True
+                return
+            else:
+                print("BAD MOVE")
+                return
         else:
             if self.whiteToMove:
                 print("It's white's turn")
