@@ -5,7 +5,7 @@ class King(Piece):
         self.has_moved = False
 
     # is_castle enforces the castle ma
-    def trigger_move(self, new_location, is_castle=False):
+    def move(self, new_location, is_castle=False):
         d_x = abs(new_location[0] - self.location[0])
         d_y = abs(new_location[1] - self.location[1])
         if is_castle:

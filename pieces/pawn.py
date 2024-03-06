@@ -5,7 +5,7 @@ class Pawn(Piece):
         self.on_back_rank = True
 
     # is_taking is an optional flag which allows a diagonal 1x1 move
-    def trigger_move(self, new_location, is_taking=False):
+    def move(self, new_location, is_taking=False):
         d_x = abs(new_location[0] - self.location[0])
         d_y = new_location[1] - self.location[1] # should be positive, cant go back
         if is_taking:
