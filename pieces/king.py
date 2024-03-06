@@ -1,7 +1,7 @@
 from piece import Piece
 class King(Piece):
-    def __init__(self, location, moves, image):
-        super().__init__(location, moves, image)
+    def __init__(self, location, image, color):
+        super().__init__(location, image, color)
         self.has_moved = False
 
     # is_castle enforces the castle ma

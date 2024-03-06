@@ -1,11 +1,11 @@
 from piece import Piece
 class Rook(Piece):
-    def __init__(self,location, image):
+    def __init__(self,location, image, color):
         # TODO get rid of color?
         super().__init__(location, image, color)
         self.has_moved = False
 
-    def check_move(self, new_location, is_castle=False):
+    def move(self, new_location, is_castle=False):
         # equation checks piece movements
         d_x = abs(new_location[0]) - self.location[0]
         d_y = abs(new_location[1] - self.location[1])

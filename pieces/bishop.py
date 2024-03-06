@@ -1,6 +1,6 @@
 from piece import Piece
 class Bishop(Piece):
-    def __init__(self,location, image):
+    def __init__(self,location, image, color):
         # TODO get rid of color?
         super().__init__(location, image, color)
         self.has_moved = False

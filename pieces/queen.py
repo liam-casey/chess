@@ -1,7 +1,7 @@
 from piece import Piece
 class Queen(Piece):
-    def __init__(self, location, moves, image):
-        super().__init__(location, moves, image)
+    def __init__(self, location, image, color):
+        super().__init__(location, image, color)
 
     def move(self, new_location):
         d_x = abs(new_location[0] - self.location[0])
