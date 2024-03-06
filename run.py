@@ -23,7 +23,7 @@ def main():
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
     # game state class, keeps track of what how the game looks currently
-    gameState = GameState()
+    gameState = GameState(IMAGES)
     # calls load images
     loadImages()
     running = True
@@ -34,39 +34,26 @@ def main():
             # checks to see if they closed the window
             if event.type == pygame.QUIT:
                 running = False
-            # mouse button
+            # mouse button down, grab a piece
             if event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos()
                 col = location[0]// SQ_SIZE
                 row = location[1] // SQ_SIZE
-                print(str(row) + ":" + str(col))
+                startPos = (row, col)
+            # mouse button up, move the piece to new destination
             if event.type == pygame.MOUSEBUTTONUP:
                 location = pygame.mouse.get_pos()
                 col = location[0]// SQ_SIZE
                 row = location[1] // SQ_SIZE
-                print(str(row) + ":" + str(col))
+                endPos = (row, col)
+                gameState.Move(startPos, endPos)
         # draw
-        drawGameState(screen, gameState)
+        gameState.board.drawBoard(screen, SQ_SIZE)
         # frame rate
         clock.tick(MAX_FPS)
         # displays everything
         pygame.display.flip()
 
-
-# Can probably get rid of this function and just call Draw Board
-def drawGameState(screen, gameState):
-    drawBoard(screen, gameState.board)
-
-# Can probably put this function in its own board class
-def drawBoard(screen, board):
-    colors = [pygame.Color("white"), pygame.Color("gray")]
-    for row in range(DIMENSION):
-        for col in range(DIMENSION):
-            color = colors[((row+col) % 2)]
-            pygame.draw.rect(screen, color, pygame.Rect(col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
-            piece = board[row][col]
-            if piece != "":
-                screen.blit(IMAGES[piece], pygame.Rect(col*SQ_SIZE, row*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 if __name__ == "__main__":
     main()
