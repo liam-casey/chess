@@ -27,3 +27,8 @@ class Pawn(Piece):
         self.location = new_location
         self.on_back_rank = False
         return True
+
+    # function takes in position after a piece has been moved and reassigns the ending location
+    # as the current location
+    def update_location(self, endPos):
+        self.location = endPos

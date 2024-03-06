@@ -13,3 +13,8 @@ class Queen(Piece):
             return True
         else:
             return False
+
+    # function takes in position after a piece has been moved and reassigns the ending location
+    # as the current location
+    def update_location(self, endPos):
+        self.location = endPos
