@@ -12,19 +12,16 @@ class Pawn(Piece):
             if d_x != 1 or d_y != 1:
                 return False
             else:
-                self.location = new_location
                 self.on_back_rank = False
                 return True
         if d_x != 0:
             return False
         if d_y != 1:
             if self.on_back_rank and d_y == 2:
-                self.location = new_location
                 self.on_back_rank = False
                 return True
             else:
                 return False
-        self.location = new_location
         self.on_back_rank = False
         return True
 

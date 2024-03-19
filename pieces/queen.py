@@ -9,7 +9,6 @@ class Queen(Piece):
 
         # Check if the move is diagonal, horizontal, or vertical
         if (d_x == d_y) or (d_x == 0 and d_y != 0) or (d_x != 0 and d_y == 0):
-            self.location = new_location
             return True
         else:
             return False

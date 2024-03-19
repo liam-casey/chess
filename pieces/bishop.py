@@ -11,7 +11,6 @@ class Bishop(Piece):
        d_y = abs(new_location[1] - self.location[1])
        # checks to see if move is diagonal or no
        if abs(d_x) == abs(d_y):
-            self.location = new_location
             self.has_moved = True
             return True
        return False;   

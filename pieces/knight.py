@@ -9,7 +9,6 @@ class Knight(Piece):
 
         # Check if the move follows the L-shaped pattern of a knight
         if (d_x == 1 and d_y == 2) or (d_x == 2 and d_y == 1):
-            self.location = new_location
             return True
         else:
             return False
