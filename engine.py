@@ -42,66 +42,8 @@ class GameState:
                 return
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
-            if piece.move(endPos):
+            if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 # This code makes sure that the rook can't move through pieces
-                if isinstance(piece, Rook):
-                    dy = abs(endPos[0] - startPos[0])
-                    dx = abs(endPos[1] - startPos[1])
-                    if dy == 0:
-                        count = 1
-                        while count < dx:
-                            tup = (endPos[0], max(startPos[1], endPos[1]) - count)
-                            if self.board.getPiece(tup) != "":
-                                return
-                            count = count + 1
-                    else:
-                        count = 1
-                        while count < dy:
-                            tup = (max(startPos[0], endPos[0]) - count, endPos[1])
-                            if self.board.getPiece(tup) != "":
-                                return
-                            count = count + 1
-                if isinstance(piece, Bishop):
-                    dy = abs(startPos[0] - endPos[0])
-                    dx = startPos[1] - endPos[1]
-                    count = 1
-                    tup = max(startPos, endPos)
-                    while count < dy:
-                        if dx > 0:
-                            if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
-                                return
-                        else:
-                            if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
-                                return
-                        count = count + 1
-                # if isinstance(piece, Queen):
-                #     dx = abs(endPos[0] - startPos[0])
-                #     dy = abs(endPos[1] - startPos[1])
-                #     if dx != 0 and dy != 0:
-                #         x_cord = endPos[0]
-                #         y_cord = endPos[1]
-                #         while x_cord > startPos[0] - 1:
-                #             if self.board.getPiece((x_cord, y_cord)) != "":
-                #                 return
-                #             x_cord = x_cord - 1
-                #             y_cord = y_cord - 1
-                #     elif dx == 0:
-                #         i = endPos[0]
-                #         while i > startPos[0] - 1:
-                #             if self.board.getPiece((i, startPos[1])) != "":
-                #                 return
-                #             i = i - 1
-                #     else:
-                #         i = endPos[1]
-                #         while i > startPos[1] - 1:
-                #             if self.board.getPiece((startPos[0], i)) != "":
-                #                 return
-                #             i = i - 1
-                # # king is only allowed to move one space, so if it trys to take an ally piece, it will catch up above
-                # # if isinstance(piece, King):
-                # #     pass
-                # if isinstance(piece, Pawn):
-                #     pass
                 self.board.updateBoard(startPos, endPos)
                 self.whiteToMove = False
                 self.blackTaken.append(takenPiece)
@@ -113,65 +55,7 @@ class GameState:
                 return
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
-            if piece.move(endPos):
-                if isinstance(piece, Rook):
-                    dy = abs(endPos[0] - startPos[0])
-                    dx = abs(endPos[1] - startPos[1])
-                    if dy == 0:
-                        count = 1
-                        while count < dx:
-                            tup = (endPos[0], max(startPos[1], endPos[1]) - count)
-                            if self.board.getPiece(tup) != "":
-                                return
-                            count = count + 1
-                    else:
-                        count = 1
-                        while count < dy:
-                            tup = (max(startPos[0], endPos[0]) - count, endPos[1])
-                            if self.board.getPiece(tup) != "":
-                                return
-                            count = count + 1
-                if isinstance(piece, Bishop):
-                    dy = abs(startPos[0] - endPos[0])
-                    dx = startPos[1] - endPos[1]
-                    count = 1
-                    tup = max(startPos, endPos)
-                    while count < dy:
-                        if dx > 0:
-                            if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
-                                return
-                        else:
-                            if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
-                                return
-                        count = count + 1
-                if isinstance(piece, Queen):
-                    dx = endPos[0] - startPos[0]
-                    dy = endPos[1] - startPos[1]
-                    if dx != 0 and dy != 0:
-                        x_cord = endPos[0]
-                        y_cord = endPos[1]
-                        while x_cord > startPos[0] - 1:
-                            if self.board.getPiece((x_cord, y_cord)) != "":
-                                return
-                            x_cord = x_cord - 1
-                            y_cord = y_cord - 1
-                    elif dx == 0:
-                        i = endPos[0]
-                        while i > startPos[0] - 1:
-                            if self.board.getPiece((i, startPos[1])) != "":
-                                return
-                            i = i - 1
-                    else:
-                        i = endPos[1]
-                        while i > startPos[1] - 1:
-                            if self.board.getPiece((startPos[0], i)) != "":
-                                return
-                            i = i - 1
-                # king is only allowed to move one space, so if it trys to take an ally piece, it will catch up above
-                # if isinstance(piece, King):
-                #     pass
-                if isinstance(piece, Pawn):
-                    pass
+            if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 self.board.updateBoard(startPos, endPos)
                 self.whiteToMove = True
                 self.whiteTaken.append(takenPiece)
@@ -188,10 +72,94 @@ class GameState:
                 print("It's black's turn")
                 return
     
-    def showTaken():
+    def showTaken(self):
         pass
 
-    def checkCheckMate():
+    def checkCheckMate(self):
         pass
+
+    def noMovingThroughOthers(self, startPos, endPos, piece):
+        # Rook working as intended
+        if isinstance(piece, Rook):
+            dy = abs(endPos[0] - startPos[0])
+            dx = abs(endPos[1] - startPos[1])
+            if dy == 0:
+                count = 1
+                while count < dx:
+                    tup = (endPos[0], max(startPos[1], endPos[1]) - count)
+                    if self.board.getPiece(tup) != "":
+                        return False
+                    count = count + 1
+            else:
+                count = 1
+                while count < dy:
+                    tup = (max(startPos[0], endPos[0]) - count, endPos[1])
+                    if self.board.getPiece(tup) != "":
+                        return False
+                    count = count + 1
+            return True
+        
+        # bishop is broken when moving upwards, not moving downwards
+        if isinstance(piece, Bishop):
+            dy = abs(startPos[0] - endPos[0])
+            dx = startPos[1] - endPos[1]
+            count = 1
+            tup = max(startPos, endPos)
+            while count < dy:
+                if dx > 0:
+                    if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                        return False
+                else:
+                    if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                        return False
+                count = count + 1
+            return True
+
+        # queen needs to be updated with code from rook
+        # queen also needs to be updated with code from bishop which is now working as intended
+        if isinstance(piece, Queen):
+            dy = abs(startPos[0] - endPos[0])
+            dx = startPos[1] - endPos[1]
+            if dy != 0 and dx != 0:
+                count = 1
+                tup = max(startPos, endPos)
+                while count < dy:
+                    if dx > 0:
+                        if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                            print("diagonal 1 is working")
+                            return False
+                    else:
+                        if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                            print("diagonal 2 is working")
+                            return False
+                    count = count + 1
+            elif dx == 0:
+                i = endPos[0]
+                while i > startPos[0] - 1:
+                    if self.board.getPiece((i, startPos[1])) != "":
+                        print("dx is working")
+                        return False
+                    i = i - 1
+            else:
+                dx = abs(endPos[1] - startPos[1])
+                i = endPos[1]
+                while i > startPos[1] - 1:
+                    if self.board.getPiece((startPos[0], i)) != "":
+                        print("dy is working")
+                        return False
+                    i = i - 1
+            print("Queen moved success")
+            return True
+        
+        # TODO: IMPLEMENT PAWN
+        # Pawn should check the space in front of it or two spaces in front
+        if isinstance(piece, Pawn):
+            pass
+        # King doesn't matter
+        if isinstance(piece, King):
+            return True
+        # Knight can hop over other pieces
+        if isinstance(piece, Knight):
+            return True
 
     
