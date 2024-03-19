@@ -6,6 +6,14 @@ from pieces.king import King
 from pieces.knight import Knight
 from pieces.bishop import Bishop
 
+
+# REMINDERS - CHANGED ALL OF THE PIECES TO NOT SELF UPDATE, ALL PIECES WILL BE UPDATED VIA UPDATE_POSITION IN BOARD
+# NEED TO LOOK AT PAWN/KING/ROOK CLASS
+    # PAWN SHOULDN'T UPDATE IF IT HAS MOVED ALREADY, SHOULD USE A DIFFERENT FUNCTION, POSSIBLY IN ENGINE
+    # KING AND ROOK NEED TO FIGURE OUT HOW CASTLING WORKS - MAY NEED TO ADJUST SOME FUNCTIONS IN ENGINE
+
+
+
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
 # if a move is valid as well.
 
