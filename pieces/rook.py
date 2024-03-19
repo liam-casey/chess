@@ -7,7 +7,7 @@ class Rook(Piece):
 
     def move(self, new_location, is_castle=False):
         # equation checks piece movements
-        d_x = abs(new_location[0]) - self.location[0]
+        d_x = abs(new_location[0] - self.location[0])
         d_y = abs(new_location[1] - self.location[1])
 
         # firstly check if castling is an option
