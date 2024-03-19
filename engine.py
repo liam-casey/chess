@@ -52,25 +52,28 @@ class GameState:
                         while count < dx:
                             tup = (endPos[0], max(startPos[1], endPos[1]) - count)
                             if self.board.getPiece(tup) != "":
-                                print(tup)
                                 return
                             count = count + 1
                     else:
                         count = 1
                         while count < dy:
-                            tup = (max(startPos[1], endPos[1]) - count, endPos[1])
+                            tup = (max(startPos[0], endPos[0]) - count, endPos[1])
                             if self.board.getPiece(tup) != "":
-                                print(tup)
                                 return
                             count = count + 1
-                # if isinstance(piece, Bishop):
-                #     x_cord = endPos[0]
-                #     y_cord = endPos[1]
-                #     while x_cord > startPos[0] - 1:
-                #         if self.board.getPiece((x_cord, y_cord)) != "":
-                #             return
-                #         x_cord = x_cord - 1
-                #         y_cord = y_cord - 1
+                if isinstance(piece, Bishop):
+                    dy = abs(startPos[0] - endPos[0])
+                    dx = startPos[1] - endPos[1]
+                    count = 1
+                    tup = max(startPos, endPos)
+                    while count < dy:
+                        if dx > 0:
+                            if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                                return
+                        else:
+                            if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                                return
+                        count = count + 1
                 # if isinstance(piece, Queen):
                 #     dx = abs(endPos[0] - startPos[0])
                 #     dy = abs(endPos[1] - startPos[1])
@@ -112,28 +115,35 @@ class GameState:
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos):
                 if isinstance(piece, Rook):
-                    dx = startPos[0] - endPos[0]
-                    dy = startPos[1] - endPos[1]
-                    if dx == 0:
-                        i = endPos[0]
-                        while i > startPos[0] - 1:
-                            if self.board.getPiece((i, startPos[1])) != "":
+                    dy = abs(endPos[0] - startPos[0])
+                    dx = abs(endPos[1] - startPos[1])
+                    if dy == 0:
+                        count = 1
+                        while count < dx:
+                            tup = (endPos[0], max(startPos[1], endPos[1]) - count)
+                            if self.board.getPiece(tup) != "":
                                 return
-                            i = i - 1
+                            count = count + 1
                     else:
-                        i = endPos[1]
-                        while i > startPos[1] - 1:
-                            if self.board.getPiece((startPos[0], i)) != "":
+                        count = 1
+                        while count < dy:
+                            tup = (max(startPos[0], endPos[0]) - count, endPos[1])
+                            if self.board.getPiece(tup) != "":
                                 return
-                            i = i - 1
+                            count = count + 1
                 if isinstance(piece, Bishop):
-                    x_cord = endPos[0]
-                    y_cord = endPos[1]
-                    while x_cord > startPos[0] - 1:
-                        if self.board.getPiece((x_cord, y_cord)) != "":
-                            return
-                        x_cord = x_cord - 1
-                        y_cord = y_cord - 1
+                    dy = abs(startPos[0] - endPos[0])
+                    dx = startPos[1] - endPos[1]
+                    count = 1
+                    tup = max(startPos, endPos)
+                    while count < dy:
+                        if dx > 0:
+                            if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                                return
+                        else:
+                            if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                                return
+                        count = count + 1
                 if isinstance(piece, Queen):
                     dx = endPos[0] - startPos[0]
                     dy = endPos[1] - startPos[1]
