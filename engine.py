@@ -183,8 +183,16 @@ class GameState:
         # TODO: IMPLEMENT PAWN
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
-            pass
-        # King doesn't matter
+            dy = abs(endPos[0] - startPos[0])
+            if dy > 1:
+                if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
+                    return False
+                if self.board.getPiece((endPos[0]), endPos[1]) != "":
+                    return False
+            if self.board.getPiece((endPos[0], endPos[1])) != "":
+                return False
+            return True
+        # King doesn't matter, will be accounted for above in the move function when checking to see it doesn't take its own pieces
         if isinstance(piece, King):
             return True
         # Knight can hop over other pieces
