@@ -13,11 +13,9 @@ class King(Piece):
                 return False
             else:
                 # assume the board is valid for a castle
-                self.location = new_location
                 return True
         if (2 > d_x >= 0) and (2 > d_y >=0):
             self.has_moved = True
-            self.location = new_location
             return True
 
     # function takes in position after a piece has been moved and reassigns the ending location

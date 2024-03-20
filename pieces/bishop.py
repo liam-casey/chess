@@ -5,19 +5,15 @@ class Bishop(Piece):
        super().__init__(location, image, color)
        self.has_moved = False
 
-
-   def move(self, new_location):
+    def move(self, new_location):
        # equation checks piece movements
-       d_x = abs(new_location[0]) - self.location[0]
+       d_x = abs(new_location[0] - self.location[0])
        d_y = abs(new_location[1] - self.location[1])
        # checks to see if move is diagonal or no
        if abs(d_x) == abs(d_y):
-            self.location = new_location
             self.has_moved = True
             return True
-       return False;    
-      
-
+       return False;   
 
    # function takes in position after a piece has been moved and reassigns the ending location
    # as the current location

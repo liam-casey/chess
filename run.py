@@ -3,10 +3,10 @@ from engine import GameState
 
 
 # constants
-WIDTH = 600
-HEIGHT = 512 # size of window
+WIDTH = 700
+HEIGHT = 700 # size of window
 DIMENSION = 8 # size of board
-SQ_SIZE = HEIGHT // DIMENSION # size of each square
+SQ_SIZE = 512 // DIMENSION # size of each square
 MAX_FPS = 60 # max frames per second
 IMAGES = {} # dictionary to keep all images
 
