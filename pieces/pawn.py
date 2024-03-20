@@ -3,6 +3,7 @@ class Pawn(Piece):
     def __init__(self, location, image, color):
         super().__init__(location, image, color)
         self.on_back_rank = True
+        self.has_moved = False
 
     # is_taking is an optional flag which allows a diagonal 1x1 move
     def move(self, new_location, is_taking=False):
@@ -29,3 +30,4 @@ class Pawn(Piece):
     # as the current location
     def update_location(self, endPos):
         self.location = endPos
+        self.has_moved = True

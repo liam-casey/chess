@@ -90,3 +90,4 @@ class Board:
         self.board[startPos[0]][startPos[1]] = ""
         self.board[endPos[0]][endPos[1]] = piece
         
+        

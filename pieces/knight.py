@@ -2,6 +2,7 @@ from piece import Piece
 class Knight(Piece):
     def __init__(self, location, image, color):
         super().__init__(location, image, color)
+        self.has_moved = False
 
     def move(self, new_location):
         d_x = abs(new_location[0] - self.location[0])
@@ -17,3 +18,4 @@ class Knight(Piece):
     # as the current location
     def update_location(self, endPos):
         self.location = endPos
+        self.has_moved = True
