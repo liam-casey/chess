@@ -2,7 +2,7 @@ from piece import Piece
 class Bishop(Piece):
     def __init__(self,location, image, color):
        # TODO get rid of color?
-       super().__init__(location, image, color)
+       super().__init__(location, image, color, 'bishop')
        self.has_moved = False
 
     def move(self, new_location):

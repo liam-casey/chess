@@ -1,7 +1,7 @@
 from piece import Piece
 class Knight(Piece):
     def __init__(self, location, image, color):
-        super().__init__(location, image, color)
+        super().__init__(location, image, color, 'knight')
         self.has_moved = False
 
     def move(self, new_location):
