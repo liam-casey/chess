@@ -108,18 +108,31 @@ class GameState:
                     count = count + 1
             return True
         
-        # bishop is broken when moving upwards, not moving downwards
+        # bishop now works
         if isinstance(piece, Bishop):
+            print("is bishop")
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
             count = 1
             tup = max(startPos, endPos)
             while count < dy:
-                if dx > 0:
-                    if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                # down left
+                if dx > 0 and endPos[0] > startPos[0]:
+                    if self.board.getPiece((endPos[0] - count, endPos[1] + count)) != "":
                         return False
+                # up left
+                elif dx > 0 and endPos[0] < startPos[0]:
+                    if self.board.getPiece((startPos[0] - count, startPos[1] - count)) != "":
+                        return False
+                # down right
+                # doesn't work
+                elif dx < 0 and endPos[0] > startPos[0]:
+                    if self.board.getPiece((endPos[0] - count, endPos[1] - count)) != "":
+                        return False
+                # up right
+                # doenst work
                 else:
-                    if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                    if self.board.getPiece((startPos[0] - count, startPos[1] + count)) != "":
                         return False
                 count = count + 1
             return True
@@ -135,30 +148,29 @@ class GameState:
                 while count < dy:
                     if dx > 0:
                         if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
-                            print("diagonal 1 is working")
                             return False
                     else:
                         if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
-                            print("diagonal 2 is working")
                             return False
                     count = count + 1
-            elif dx == 0:
-                i = endPos[0]
-                while i > startPos[0] - 1:
-                    if self.board.getPiece((i, startPos[1])) != "":
-                        print("dx is working")
+                return True
+            dx = abs(dx)
+            if dy == 0:
+                count = 1
+                while count < dx:
+                    tup = (endPos[0], max(startPos[1], endPos[1]) - count)
+                    if self.board.getPiece(tup) != "":
                         return False
-                    i = i - 1
+                    count = count + 1
+                return True
             else:
-                dx = abs(endPos[1] - startPos[1])
-                i = endPos[1]
-                while i > startPos[1] - 1:
-                    if self.board.getPiece((startPos[0], i)) != "":
-                        print("dy is working")
+                count = 1
+                while count < dy:
+                    tup = (max(startPos[0], endPos[0]) - count, endPos[1])
+                    if self.board.getPiece(tup) != "":
                         return False
-                    i = i - 1
-            print("Queen moved success")
-            return True
+                    count = count + 1
+                return True
         
         # TODO: IMPLEMENT PAWN
         # Pawn should check the space in front of it or two spaces in front
