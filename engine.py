@@ -88,12 +88,28 @@ class GameState:
         pass
     
     # checks to see if En Passant is a viable move
-    def enPassant(self):
+    # TODO
+    def enPassant(self, piece):
+        # rules for en passant
+        # the enemy pawn advanced two squares on the previous turn;
+        # the capturing pawn attacks the square that the enemy pawn passed over
         pass
     
     # checks to see if En Passant is a viable move
-    def castle(self):
-        pass
+    # coordinates go y, x in location var
+    # TODO
+    def castle(self, piece):
+        # Neither the king nor the rook has previously moved.
+        if (piece.King.has_moved == False) and (piece.Rook.has_moved == False):
+            # There are no pieces between the king and the rook.
+            if () and ():
+                # The king is not currently in check.
+                if self.checkCheckMate == False:
+                    # The king does not pass through or finish on a square that is attacked by an enemy piece
+                    if (): 
+                        return True
+
+
 
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
