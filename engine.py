@@ -86,6 +86,14 @@ class GameState:
 
     def checkCheckMate(self):
         pass
+    
+    # checks to see if En Passant is a viable move
+    def enPassant(self):
+        pass
+    
+    # checks to see if En Passant is a viable move
+    def castle(self):
+        pass
 
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
