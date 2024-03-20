@@ -55,7 +55,8 @@ class GameState:
                 # This code makes sure that the rook can't move through pieces
                 self.board.updateBoard(startPos, endPos)
                 self.whiteToMove = False
-                self.blackTaken.append(takenPiece)
+                if takenPiece != "":
+                    self.blackTaken.append(takenPiece)
                 return
             # else print bad move and return
             else:
@@ -67,7 +68,8 @@ class GameState:
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 self.board.updateBoard(startPos, endPos)
                 self.whiteToMove = True
-                self.whiteTaken.append(takenPiece)
+                if takenPiece != "":
+                    self.whiteTaken.append(takenPiece)
                 return
             else:
                 print("BAD MOVE")
