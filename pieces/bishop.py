@@ -1,6 +1,6 @@
 from piece import Piece
 class Bishop(Piece):
-   def __init__(self,location, image, color):
+    def __init__(self,location, image, color):
        # TODO get rid of color?
        super().__init__(location, image, color)
        self.has_moved = False
@@ -17,5 +17,5 @@ class Bishop(Piece):
 
    # function takes in position after a piece has been moved and reassigns the ending location
    # as the current location
-   def update_location(self, endPos):
+    def update_location(self, endPos):
        self.location = endPos
