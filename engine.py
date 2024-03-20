@@ -114,7 +114,6 @@ class GameState:
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
             count = 1
-            tup = max(startPos, endPos)
             while count < dy:
                 # down left
                 if dx > 0 and endPos[0] > startPos[0]:
@@ -144,13 +143,22 @@ class GameState:
             dx = startPos[1] - endPos[1]
             if dy != 0 and dx != 0:
                 count = 1
-                tup = max(startPos, endPos)
                 while count < dy:
-                    if dx > 0:
-                        if self.board.getPiece((tup[0] - count, tup[1] + count)) != "":
+                    # down left
+                    if dx > 0 and endPos[0] > startPos[0]:
+                        if self.board.getPiece((endPos[0] - count, endPos[1] + count)) != "":
                             return False
+                    # up left
+                    elif dx > 0 and endPos[0] < startPos[0]:
+                        if self.board.getPiece((startPos[0] - count, startPos[1] - count)) != "":
+                            return False
+                    # down right
+                    elif dx < 0 and endPos[0] > startPos[0]:
+                        if self.board.getPiece((endPos[0] - count, endPos[1] - count)) != "":
+                            return False
+                    # up right
                     else:
-                        if self.board.getPiece((tup[0] - count, tup[1] - count)) != "":
+                        if self.board.getPiece((startPos[0] - count, startPos[1] + count)) != "":
                             return False
                     count = count + 1
                 return True
