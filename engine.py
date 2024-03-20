@@ -187,7 +187,7 @@ class GameState:
             if dy > 1:
                 if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
                     return False
-                if self.board.getPiece((endPos[0]), endPos[1]) != "":
+                if self.board.getPiece((endPos[0], endPos[1])) != "":
                     return False
             if self.board.getPiece((endPos[0], endPos[1])) != "":
                 return False
