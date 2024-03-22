@@ -19,15 +19,19 @@ def loadImages():
 def main():
     # initialize the screen display
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.font.init()
     # timer for clock
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
     # calls load images
     loadImages()
     # game state class, keeps track of what how the game looks currently
-    gameState = GameState(IMAGES)
+    gameState = GameState(IMAGES, screen)
     running = True
     squareSelected = ()
+    font = pygame.font.SysFont("Comic Sans MS", 20)
+    text = font.render("It's white's turn", False, (0,0,0))
+    screen.blit(text, (50, 550))
     # main driver of game, while loop that keeps the game running
     while running:
         for event in pygame.event.get():
