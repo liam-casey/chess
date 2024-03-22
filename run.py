@@ -49,6 +49,7 @@ def main():
                 gameState.Move(startPos, endPos)
         # draw
         gameState.board.drawBoard(screen, SQ_SIZE)
+        gameState.showTaken(screen, WIDTH)
         # frame rate
         clock.tick(MAX_FPS)
         # displays everything

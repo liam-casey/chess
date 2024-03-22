@@ -47,7 +47,7 @@ class Board:
         white_pawn8 = Pawn((6, 7), self.IMAGES["white_pawn"], "white")
 
         # This is used for testing to make sure all pieces are working properly
-        # white_rook3 = Rook((5,3), self.IMAGES["white_rook"], "white")
+        # white_rook3 = Rook((5,4), self.IMAGES["white_rook"], "white")
         # white_queen2 = Queen((4,4), self.IMAGES["white_queen"], "white")
 
         self.board = [
