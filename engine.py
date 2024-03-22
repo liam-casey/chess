@@ -1,3 +1,4 @@
+import pygame
 from board import Board
 from pieces.rook import Rook
 from pieces.pawn import Pawn
@@ -83,8 +84,11 @@ class GameState:
                 print("It's black's turn")
                 return
     
-    def showTaken(self):
-        pass
+    def showTaken(self, screen, WIDTH):
+        for i in range(1, len(self.whiteTaken) + 1):
+            screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
+        for i in range(1, len(self.blackTaken) + 1):
+            screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(600, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
 
     def checkCheckMate(self):
         pass
@@ -189,7 +193,7 @@ class GameState:
             if dy > 1:
                 if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
                     return False
-                if self.board.getPiece((endPos[0]), endPos[1]) != "":
+                if self.board.getPiece((endPos[0], endPos[1])) != "":
                     return False
             if self.board.getPiece((endPos[0], endPos[1])) != "":
                 return False
