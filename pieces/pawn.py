@@ -2,7 +2,7 @@ from piece import Piece
 
 class Pawn(Piece):
     def __init__(self, location, image, color):
-        super().__init__(location, image, color)
+        super().__init__(location, image, color, 'pawn')
         self.on_back_rank = True
         self.has_moved = False
     def update_location(self, endPos):
