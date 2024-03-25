@@ -80,9 +80,9 @@ class Board:
                 if piece != "":
                     screen.blit(piece.get_image(), pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
         text = self.font.render("White", False, (0,0,0))
-        screen.blit(text, (525, 15))
+        screen.blit(text, (525, 10))
         text = self.font.render("Black", False, (0,0,0))
-        screen.blit(text, (615, 15))
+        screen.blit(text, (615, 10))
     
     # returns what piece is on that space
     def getPiece(self, startPos):

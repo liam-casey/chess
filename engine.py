@@ -28,14 +28,17 @@ class GameState:
         self.screen = screen
         # white goes first
         self.whiteToMove = True
+        self.whiteMinutes = 5
+        self.whiteSeconds = 00
+        self.blackMinutes = 5
+        self.blackSeconds = 00
         self.whiteTaken = []
         self.blackTaken = []
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
+        self.gameOver = False
     
     def Move(self, startPos, endPos):
         self.screen.fill(pygame.Color("white"))
-        # eraseText = self.font.render('THIS IS A SUPER LONG STRING', False, (255,255,255))
-        # self.screen.blit(eraseText, (50, 550))
         if startPos[0] > 7 or startPos[1] > 7:
             # HAVE A DRAW STATEMENT FOR INPUTING IN THE RIGHT AREAS
             return
@@ -56,6 +59,8 @@ class GameState:
         # makes sure that the taken piece and the moved piece aren't the same color
         if takenPiece != "":
             if piece.get_color() == takenPiece.get_color():
+                text = self.font.render("You can't take your own piece", False, (0,0,0))
+                self.screen.blit(text, (50,550))
                 return
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
@@ -104,9 +109,6 @@ class GameState:
         for i in range(1, len(self.whiteTaken) + 1):
             screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
 
-    def checkCheckMate(self):
-        pass
-
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
         if isinstance(piece, Rook):
@@ -130,7 +132,6 @@ class GameState:
         
         # bishop now works
         if isinstance(piece, Bishop):
-            print("is bishop")
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
             count = 1
@@ -200,7 +201,7 @@ class GameState:
                     count = count + 1
                 return True
         
-        # TODO: IMPLEMENT PAWN
+        # TODO: IMPLEMENT PAWN, NEEDS TO ACCOUNT FOR TAKING
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
             dy = abs(endPos[0] - startPos[0])
@@ -219,4 +220,30 @@ class GameState:
         if isinstance(piece, Knight):
             return True 
 
-    
+
+    def displayClock(self):
+        # if a second has passed and its white's turn, decrement the time
+        if self.whiteToMove:
+            # if seconds reaches 0, subtract from minutes
+            if self.whiteSeconds <= 0:
+                self.whiteMinutes = self.whiteMinutes - 1
+                self.whiteSeconds = self.whiteSeconds + 60
+            self.whiteSeconds = self.whiteSeconds - 1
+        elif self.whiteToMove == False:
+            if self.blackSeconds <= 0:
+                self.blackMinutes = self.blackMinutes - 1
+                self.blackSeconds = self.blackSeconds + 60
+            self.blackSeconds = self.blackSeconds - 1
+        if self.whiteSeconds <= 0 and self.whiteMinutes <= 0:
+            self.gameOver = True
+            return
+        if self.blackMinutes <=0 and self.blackSeconds <=0:
+            self.gameOver = True
+            return
+        surface = pygame.Surface((200,25))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(525, 35, 200, 25))
+        text = self.font.render(str(self.whiteMinutes) + ":" + str(self.whiteSeconds), False, (0,0,0))
+        self.screen.blit(text, (525, 35))
+        text = self.font.render(str(self.blackMinutes) + ":" + str(self.blackSeconds), False, (0,0,0))
+        self.screen.blit(text, (615, 35))
