@@ -29,9 +29,9 @@ class GameState:
         # white goes first
         self.whiteToMove = True
         self.whiteMinutes = 5
-        self.whiteSeconds = 00
+        self.whiteSeconds = 0
         self.blackMinutes = 5
-        self.blackSeconds = 00
+        self.blackSeconds = 0
         self.whiteTaken = []
         self.blackTaken = []
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
@@ -45,7 +45,16 @@ class GameState:
         if endPos[0] > 7 or endPos[0] > 7:
             return
         if startPos == endPos:
-            return
+            if self.whiteToMove:
+                text = self.font.render("It's white's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's white's turn")
+                return
+            else: 
+                text = self.font.render("It's black's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's black's turn")
+                return
         # check to see if the piece is the right color
         piece = self.board.getPiece(startPos)
         # get the piece at the end position
@@ -240,10 +249,21 @@ class GameState:
         if self.blackMinutes <=0 and self.blackSeconds <=0:
             self.gameOver = True
             return
+        # TODO: EDIT THIS CODE TO ONLY ERASE THE CHANGING STUFF
         surface = pygame.Surface((200,25))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(525, 35, 200, 25))
-        text = self.font.render(str(self.whiteMinutes) + ":" + str(self.whiteSeconds), False, (0,0,0))
+        whiteText = str(self.whiteMinutes) + ":"
+        if self.whiteSeconds >= 10:
+            whiteText += str(self.whiteSeconds)
+        else:
+            whiteText = whiteText + "0" + str(self.whiteSeconds)
+        text = self.font.render(whiteText, False, (0,0,0))
         self.screen.blit(text, (525, 35))
-        text = self.font.render(str(self.blackMinutes) + ":" + str(self.blackSeconds), False, (0,0,0))
+        blackText = str(self.blackMinutes) + ":"
+        if self.blackSeconds >= 10:
+            blackText += str(self.blackSeconds)
+        else:
+            blackText = blackText + "0" + str(self.blackSeconds)
+        text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
