@@ -90,7 +90,9 @@ class Board:
     
     # updates the 8 by 8 array with the given move
     def updateBoard(self, startPos, endPos):
-        self.screen.fill(pygame.Color("white"))
+        surface = pygame.Surface((512,512))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(0, 0, 512, 512))
         piece = self.board[startPos[0]][startPos[1]]
         # update pieces position field
         piece.update_location(endPos)

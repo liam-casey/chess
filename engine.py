@@ -38,7 +38,9 @@ class GameState:
         self.gameOver = False
     
     def Move(self, startPos, endPos):
-        self.screen.fill(pygame.Color("white"))
+        surface = pygame.Surface((200,25))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(50, 550, 200, 25))
         if startPos[0] > 7 or startPos[1] > 7:
             # HAVE A DRAW STATEMENT FOR INPUTING IN THE RIGHT AREAS
             return
@@ -250,9 +252,12 @@ class GameState:
             self.gameOver = True
             return
         # TODO: EDIT THIS CODE TO ONLY ERASE THE CHANGING STUFF
-        surface = pygame.Surface((200,25))
+        surface = pygame.Surface((100,25))
         surface.fill((255,255,255))
-        self.screen.blit(surface, pygame.Rect(525, 35, 200, 25))
+        if self.whiteToMove:
+            self.screen.blit(surface, pygame.Rect(525, 35, 100, 25))
+        else:
+            self.screen.blit(surface, pygame.Rect(615, 35, 100, 25))
         whiteText = str(self.whiteMinutes) + ":"
         if self.whiteSeconds >= 10:
             whiteText += str(self.whiteSeconds)
