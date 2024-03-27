@@ -1,4 +1,5 @@
 import pygame
+import copy
 from board import Board
 from pieces.rook import Rook
 from pieces.pawn import Pawn
@@ -7,15 +8,6 @@ from pieces.king import King
 from pieces.knight import Knight
 from pieces.bishop import Bishop
 from find_check import * 
-
-
-# REMINDERS - CHANGED ALL OF THE PIECES TO NOT SELF UPDATE, ALL PIECES WILL BE UPDATED VIA UPDATE_POSITION IN BOARD
-# NEED TO LOOK AT PAWN/KING/ROOK CLASS
-    # PAWN SHOULDN'T UPDATE IF IT HAS MOVED ALREADY, SHOULD USE A DIFFERENT FUNCTION, POSSIBLY IN ENGINE
-    # KING AND ROOK NEED TO FIGURE OUT HOW CASTLING WORKS - MAY NEED TO ADJUST SOME FUNCTIONS IN ENGINE
-# PAWN STILL DOESN'T WORK
-
-
 
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
 # if a move is valid as well.
@@ -29,17 +21,19 @@ class GameState:
         self.screen = screen
         # white goes first
         self.whiteToMove = True
+        # time for black and white, if time runs out, game over
         self.whiteMinutes = 5
         self.whiteSeconds = 0
         self.blackMinutes = 5
         self.blackSeconds = 0
+        # taken pieces
         self.whiteTaken = []
         self.blackTaken = []
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
         self.gameOver = False
     
     def Move(self, startPos, endPos):
-        surface = pygame.Surface((200,25))
+        surface = pygame.Surface((450,25))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 550, 450, 25))
         if startPos[0] > 7 or startPos[1] > 7:
@@ -77,12 +71,20 @@ class GameState:
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                # This code makes sure that the rook can't move through pieces
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = False
-                if takenPiece != "":
-                    self.blackTaken.append(takenPiece)
-                return
+                if self.checkCheck(startPos, endPos, "white"):
+                    # This code makes sure that the rook can't move through pieces
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = False
+                    if takenPiece != "":
+                        self.blackTaken.append(takenPiece)
+                    if self.checkCheck("black"):
+                        print("black is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    print("Cannot put yourself in check")
+                    return
             # else print bad move and return
             else:
                 # then print something out that says its not a good move
@@ -93,11 +95,19 @@ class GameState:
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = True
-                if takenPiece != "":
-                    self.whiteTaken.append(takenPiece)
-                return
+                if self.checkCheck(startPos, endPos, "black"):
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = True
+                    if takenPiece != "":
+                        self.whiteTaken.append(takenPiece)
+                    if self.checkCheck("white"):
+                        print("white is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    print("Cannot put yourself in check")
+                    return
             else:
                 text = self.font.render("This move doesn't work", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
@@ -281,6 +291,9 @@ class GameState:
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
             dy = abs(endPos[0] - startPos[0])
+            dx = abs(endPos[1] - startPos[1])
+            if dx == 1 and dy == 1:
+                return True
             if dy > 1:
                 if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
                     return False
@@ -336,3 +349,24 @@ class GameState:
             blackText = blackText + "0" + str(self.blackSeconds)
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
+
+    def checkCheck(self, startPos, endPos, color):
+        copiedGS = copy.deepcopy(self)
+        copiedGS.board.updateBoard(startPos, endPos)
+        for i in range(8):
+            for j in range(8):
+                piece = copiedGS.board.getPiece.getPiece(i, j)
+                if piece.color == color and isinstance(piece, King):
+                    kingToCheck = piece
+                    kingLoc = (i,j)
+                    break
+        for i in range(8):
+            for j in range(8):
+                piece = copiedGS.board.getPiece(i,j)
+                if piece != "":
+                    if piece.color != kingToCheck.color:
+                        if piece.move(kingLoc) and copiedGS.noMovingThroughOthers((i,j), kingLoc, piece):
+                            del copiedGS
+                            return True
+        del copiedGS
+        return False

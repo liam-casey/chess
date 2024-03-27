@@ -32,6 +32,9 @@ def main():
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("It's white's turn", False, (0,0,0))
     screen.blit(text, (50, 550))
+    # TODO: ADD IN A SCREEN THAT WILL DISPLAY 2 OPTIONS, ONE FOR 2 PLAYER, ONE FOR 1 PLAYER
+
+    
     # main driver of game, while loop that keeps the game running
     while running:
         if gameState.gameOver:
@@ -61,9 +64,11 @@ def main():
         if time_passed >= 1000:
             gameState.displayClock()
             time_passed = 0
+        if gameState.gameOver:
+            running = False
         # displays everything
         pygame.display.flip()
-
+    # TODO: AFTER GAME IS DONE, DISPLAY WHO WON
 
 if __name__ == "__main__":
     main()
