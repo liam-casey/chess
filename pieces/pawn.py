@@ -5,11 +5,9 @@ class Pawn(Piece):
         super().__init__(location, image, color, 'pawn')
         self.on_back_rank = True
         self.has_moved = False
+        self.en_passant = True
     def update_location(self, endPos):
         self.location = endPos
-<<<<<<< HEAD
-        self.has_moved = True
-=======
         self.has_moved = True    
 
     def move(self, new_location):
@@ -33,5 +31,7 @@ class Pawn(Piece):
             return True
         else:
             return False
+    def getEnPassant(self):
+        pass
+    
         
->>>>>>> 0d24418458d08f297e668382a1ff3e5e563101b0

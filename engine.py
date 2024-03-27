@@ -6,6 +6,7 @@ from pieces.queen import Queen
 from pieces.king import King
 from pieces.knight import Knight
 from pieces.bishop import Bishop
+from find_check import * 
 
 
 # REMINDERS - CHANGED ALL OF THE PIECES TO NOT SELF UPDATE, ALL PIECES WILL BE UPDATED VIA UPDATE_POSITION IN BOARD
@@ -121,28 +122,52 @@ class GameState:
             screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
     
     # checks to see if En Passant is a viable move
-    # TODO
-    def enPassant(self, piece):
+    def enPassant(self, piece, startPos, endPos):
         # rules for en passant
         # the enemy pawn advanced two squares on the previous turn;
         # the capturing pawn attacks the square that the enemy pawn passed over
-        # TODO MAYBE CHANGE THIS TO MATCH L
-        if (piece.Pawn.getEnPassant == True):
-            pass
+        # Get the piece at the end position
+        pass
+
+
+        
     
-    # checks to see if En Passant is a viable move
+    # checks to see if castling is a viable move
     # coordinates go y, x in location var
-    # TODO 
-    def castle(self, piece):
-        # Neither the king nor the rook has previously moved.
-        if (piece.King.has_moved == False) and (piece.Rook.has_moved == False):
-            # There are no pieces between the king and the rook.
-            if () and ():
-                # The king is not currently in check.
-                if self.checkCheckMate == False:
-                    # The king does not pass through or finish on a square that is attacked by an enemy piece
-                    if (): 
+    def castle(self, piece, startPos, endPos):
+        # Check if the piece is a king
+        if isinstance(piece, King):
+            # Check if the king hasn't moved
+            if not piece.has_moved:
+                # Check if the end position is to the right of the start position
+                if endPos[1] > startPos[1]:
+                    # Check if there are no pieces between the king and the rook
+                    for col in range(startPos[1] + 1, endPos[1]):
+                        if self.board.getPiece((startPos[0], col)) != "":
+                            return False
+                    # Check if the rook exists at the expected position
+                    rook = self.board.getPiece((startPos[0], 7))
+                    # Check if the rook hasn't moved
+                    if isinstance(rook, Rook) and not rook.has_moved:
+                        # Update the board for the king and rook's new positions
+                        self.board.updateBoard(startPos, endPos)
+                        self.board.updateBoard((startPos[0], 7), (endPos[0], endPos[1] - 1))
                         return True
+                # Check if the end position is to the left of the start position
+                elif endPos[1] < startPos[1]:
+                    # Check if there are no pieces between the king and the rook
+                    for col in range(endPos[1] + 1, startPos[1]):
+                        if self.board.getPiece((startPos[0], col)) != "":
+                            return False
+                    # Check if the rook exists at the expected position
+                    rook = self.board.getPiece((startPos[0], 0))
+                    # Check if the rook hasn't moved
+                    if isinstance(rook, Rook) and not rook.has_moved:
+                        # Update the board for the king and rook's new positions
+                        self.board.updateBoard(startPos, endPos)
+                        self.board.updateBoard((startPos[0], 0), (endPos[0], endPos[1] + 1))
+                        return True
+        return False
 
 
 
