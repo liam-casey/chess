@@ -99,7 +99,7 @@ class Board:
         self.board[startPos[0]][startPos[1]] = ""
         self.board[endPos[0]][endPos[1]] = piece
         if piece.get_color() == "white":
-            text = self.font.render("It's blacks's turn", False, (0,0,0))
+            text = self.font.render("It's black's turn", False, (0,0,0))
             self.screen.blit(text, (50, 550))
         else:
             text = self.font.render("It's white's turn", False, (0,0,0))
