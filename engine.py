@@ -127,10 +127,22 @@ class GameState:
         # the enemy pawn advanced two squares on the previous turn;
         # the capturing pawn attacks the square that the enemy pawn passed over
         # Get the piece at the end position
-        pass
-
-
-        
+        takenPiece = self.board.getPiece(endPos)
+        # Check if the piece is a pawn and it's capturing another pawn en passant
+        if isinstance(piece, Pawn) and takenPiece == "":
+            # Check if the end position is a valid en passant capture square
+            if piece.can_en_passant(endPos):
+                # Perform the en passant capture
+                self.board.updateBoard(startPos, endPos)
+                # Remove the captured pawn from the board
+                if piece.get_color() == "white":
+                    self.blackTaken.append(self.board.getPiece((startPos[0], endPos[1])))
+                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                else:
+                    self.whiteTaken.append(self.board.getPiece((startPos[0], endPos[1])))
+                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                return True
+        return False  
     
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
