@@ -216,6 +216,9 @@ class GameState:
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
             dy = abs(endPos[0] - startPos[0])
+            dx = abs(endPos[1] - startPos[1])
+            if dx == 1 and dy == 1:
+                return True
             if dy > 1:
                 if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
                     return False
