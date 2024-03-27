@@ -1,4 +1,5 @@
 import pygame
+import copy
 from board import Board
 from pieces.rook import Rook
 from pieces.pawn import Pawn
@@ -69,14 +70,20 @@ class GameState:
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                # This code makes sure that the rook can't move through pieces
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = False
-                if takenPiece != "":
-                    self.blackTaken.append(takenPiece)
-                if isinstance(takenPiece, King):
-                    self.gameOver = True
-                return
+                if self.checkCheck(startPos, endPos, "white"):
+                    # This code makes sure that the rook can't move through pieces
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = False
+                    if takenPiece != "":
+                        self.blackTaken.append(takenPiece)
+                    if self.checkCheck("black"):
+                        print("black is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    print("Cannot put yourself in check")
+                    return
             # else print bad move and return
             else:
                 # then print something out that says its not a good move
@@ -87,13 +94,19 @@ class GameState:
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = True
-                if takenPiece != "":
-                    self.whiteTaken.append(takenPiece)
-                if isinstance(takenPiece, King):
-                    self.gameOver = True
-                return
+                if self.checkCheck(startPos, endPos, "black"):
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = True
+                    if takenPiece != "":
+                        self.whiteTaken.append(takenPiece)
+                    if self.checkCheck("white"):
+                        print("white is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    print("Cannot put yourself in check")
+                    return
             else:
                 text = self.font.render("This move doesn't work", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
@@ -272,3 +285,24 @@ class GameState:
             blackText = blackText + "0" + str(self.blackSeconds)
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
+
+    def checkCheck(self, startPos, endPos, color):
+        copiedGS = copy.deepcopy(self)
+        copiedGS.board.updateBoard(startPos, endPos)
+        for i in range(8):
+            for j in range(8):
+                piece = copiedGS.board.getPiece.getPiece(i, j)
+                if piece.color == color and isinstance(piece, King):
+                    kingToCheck = piece
+                    kingLoc = (i,j)
+                    break
+        for i in range(8):
+            for j in range(8):
+                piece = copiedGS.board.getPiece(i,j)
+                if piece != "":
+                    if piece.color != kingToCheck.color:
+                        if piece.move(kingLoc) and copiedGS.noMovingThroughOthers((i,j), kingLoc, piece):
+                            del copiedGS
+                            return True
+        del copiedGS
+        return False
