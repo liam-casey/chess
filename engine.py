@@ -22,33 +22,56 @@ from pieces.bishop import Bishop
 # The board can probably be initialized in its own seperate board class
 # the pieces themselves can also probably be put in a seperate class as well, which would be initialized in the board class
 class GameState:
-    def __init__(self, images):
+    def __init__(self, images, screen):
         # this creates a starting board, the "" are empty spaces
-        self.board = Board(images)
+        self.board = Board(images, screen)
+        self.screen = screen
         # white goes first
         self.whiteToMove = True
+        self.whiteMinutes = 5
+        self.whiteSeconds = 0
+        self.blackMinutes = 5
+        self.blackSeconds = 0
         self.whiteTaken = []
         self.blackTaken = []
+        self.font = pygame.font.SysFont('Comic Sans MS', 20)
+        self.gameOver = False
     
     def Move(self, startPos, endPos):
+        surface = pygame.Surface((200,25))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(50, 550, 200, 25))
         if startPos[0] > 7 or startPos[1] > 7:
             # HAVE A DRAW STATEMENT FOR INPUTING IN THE RIGHT AREAS
             return
         if endPos[0] > 7 or endPos[0] > 7:
             return
         if startPos == endPos:
-            return
+            if self.whiteToMove:
+                text = self.font.render("It's white's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's white's turn")
+                return
+            else: 
+                text = self.font.render("It's black's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's black's turn")
+                return
         # check to see if the piece is the right color
         piece = self.board.getPiece(startPos)
         # get the piece at the end position
         takenPiece = self.board.getPiece(endPos)
         # checks to see if its a piece being selected
         if piece == "":
-            print("please select a piece to move")
+            text = self.font.render('Please Select a piece to move', False, (0,0,0))
+            self.screen.blit(text, (50, 550))
+            # print("please select a piece to move")
             return
         # makes sure that the taken piece and the moved piece aren't the same color
         if takenPiece != "":
             if piece.get_color() == takenPiece.get_color():
+                text = self.font.render("You can't take your own piece", False, (0,0,0))
+                self.screen.blit(text, (50,550))
                 return
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
@@ -62,7 +85,9 @@ class GameState:
             # else print bad move and return
             else:
                 # then print something out that says its not a good move
-                print ("This move doesn't work")
+                text = self.font.render("This move doesn't work", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print ("This move doesn't work")
                 return
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
@@ -73,25 +98,27 @@ class GameState:
                     self.whiteTaken.append(takenPiece)
                 return
             else:
-                print("BAD MOVE")
+                text = self.font.render("This move doesn't work", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
                 return
         # if it's not your turn, tell the opponent that its the other persons turn
         else:
             if self.whiteToMove:
-                print("It's white's turn")
+                text = self.font.render("It's white's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's white's turn")
                 return
             else: 
-                print("It's black's turn")
+                text = self.font.render("It's black's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's black's turn")
                 return
     
     def showTaken(self, screen, WIDTH):
-        for i in range(1, len(self.whiteTaken) + 1):
-            screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
         for i in range(1, len(self.blackTaken) + 1):
-            screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(600, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
-
-    def checkCheckMate(self):
-        pass
+            screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
+        for i in range(1, len(self.whiteTaken) + 1):
+            screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
 
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
@@ -116,7 +143,6 @@ class GameState:
         
         # bishop now works
         if isinstance(piece, Bishop):
-            print("is bishop")
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
             count = 1
@@ -186,7 +212,7 @@ class GameState:
                     count = count + 1
                 return True
         
-        # TODO: IMPLEMENT PAWN
+        # TODO: IMPLEMENT PAWN, NEEDS TO ACCOUNT FOR TAKING
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
             dy = abs(endPos[0] - startPos[0])
@@ -203,6 +229,46 @@ class GameState:
             return True
         # Knight can hop over other pieces
         if isinstance(piece, Knight):
-            return True
+            return True 
 
-    
+
+    def displayClock(self):
+        # if a second has passed and its white's turn, decrement the time
+        if self.whiteToMove:
+            # if seconds reaches 0, subtract from minutes
+            if self.whiteSeconds <= 0:
+                self.whiteMinutes = self.whiteMinutes - 1
+                self.whiteSeconds = self.whiteSeconds + 60
+            self.whiteSeconds = self.whiteSeconds - 1
+        elif self.whiteToMove == False:
+            if self.blackSeconds <= 0:
+                self.blackMinutes = self.blackMinutes - 1
+                self.blackSeconds = self.blackSeconds + 60
+            self.blackSeconds = self.blackSeconds - 1
+        if self.whiteSeconds <= 0 and self.whiteMinutes <= 0:
+            self.gameOver = True
+            return
+        if self.blackMinutes <=0 and self.blackSeconds <=0:
+            self.gameOver = True
+            return
+        # TODO: EDIT THIS CODE TO ONLY ERASE THE CHANGING STUFF
+        surface = pygame.Surface((100,25))
+        surface.fill((255,255,255))
+        if self.whiteToMove:
+            self.screen.blit(surface, pygame.Rect(525, 35, 100, 25))
+        else:
+            self.screen.blit(surface, pygame.Rect(615, 35, 100, 25))
+        whiteText = str(self.whiteMinutes) + ":"
+        if self.whiteSeconds >= 10:
+            whiteText += str(self.whiteSeconds)
+        else:
+            whiteText = whiteText + "0" + str(self.whiteSeconds)
+        text = self.font.render(whiteText, False, (0,0,0))
+        self.screen.blit(text, (525, 35))
+        blackText = str(self.blackMinutes) + ":"
+        if self.blackSeconds >= 10:
+            blackText += str(self.blackSeconds)
+        else:
+            blackText = blackText + "0" + str(self.blackSeconds)
+        text = self.font.render(blackText, False, (0,0,0))
+        self.screen.blit(text, (615, 35))

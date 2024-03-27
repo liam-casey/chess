@@ -7,9 +7,11 @@ from pieces.knight import Knight
 from pieces.bishop import Bishop
 
 class Board:     
-    def __init__(self, images):    
+    def __init__(self, images, screen):    
         # intialize all of pieces with the pieces in the pieces folder
         self.IMAGES = images
+        self.font = pygame.font.SysFont("Comic Sans MS", 20)
+        self.screen = screen
 
         # The pieces in the board should no longer be strings, they should be a piece object 
         black_rook1 = Rook((0,0), self.IMAGES["black_rook"], "black")
@@ -77,6 +79,10 @@ class Board:
                 # if its not empty, draw the piece
                 if piece != "":
                     screen.blit(piece.get_image(), pygame.Rect(col*screen_size, row*screen_size, screen_size, screen_size))
+        text = self.font.render("White", False, (0,0,0))
+        screen.blit(text, (525, 10))
+        text = self.font.render("Black", False, (0,0,0))
+        screen.blit(text, (615, 10))
     
     # returns what piece is on that space
     def getPiece(self, startPos):
@@ -84,10 +90,19 @@ class Board:
     
     # updates the 8 by 8 array with the given move
     def updateBoard(self, startPos, endPos):
+        surface = pygame.Surface((512,512))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(0, 0, 512, 512))
         piece = self.board[startPos[0]][startPos[1]]
         # update pieces position field
         piece.update_location(endPos)
         self.board[startPos[0]][startPos[1]] = ""
         self.board[endPos[0]][endPos[1]] = piece
+        if piece.get_color() == "white":
+            text = self.font.render("It's blacks's turn", False, (0,0,0))
+            self.screen.blit(text, (50, 550))
+        else:
+            text = self.font.render("It's white's turn", False, (0,0,0))
+            self.screen.blit(text, (50, 550))
         
         

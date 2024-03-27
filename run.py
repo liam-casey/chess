@@ -19,17 +19,23 @@ def loadImages():
 def main():
     # initialize the screen display
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.font.init()
     # timer for clock
     clock = pygame.time.Clock()
     screen.fill(pygame.Color("white"))
     # calls load images
     loadImages()
     # game state class, keeps track of what how the game looks currently
-    gameState = GameState(IMAGES)
+    gameState = GameState(IMAGES, screen)
     running = True
-    squareSelected = ()
+    time_passed = 0
+    font = pygame.font.SysFont("Comic Sans MS", 20)
+    text = font.render("It's white's turn", False, (0,0,0))
+    screen.blit(text, (50, 550))
     # main driver of game, while loop that keeps the game running
     while running:
+        if gameState.gameOver:
+            running = False
         for event in pygame.event.get():
             # checks to see if they closed the window
             if event.type == pygame.QUIT:
@@ -51,7 +57,10 @@ def main():
         gameState.board.drawBoard(screen, SQ_SIZE)
         gameState.showTaken(screen, WIDTH)
         # frame rate
-        clock.tick(MAX_FPS)
+        time_passed += clock.tick(MAX_FPS)
+        if time_passed >= 1000:
+            gameState.displayClock()
+            time_passed = 0
         # displays everything
         pygame.display.flip()
 
