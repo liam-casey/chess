@@ -93,11 +93,13 @@ class GameState:
         # rules for en passant
         # the enemy pawn advanced two squares on the previous turn;
         # the capturing pawn attacks the square that the enemy pawn passed over
-        pass
+        # TODO MAYBE CHANGE THIS TO MATCH L
+        if (piece.Pawn.getEnPassant == True):
+            pass
     
     # checks to see if En Passant is a viable move
     # coordinates go y, x in location var
-    # TODO
+    # TODO 
     def castle(self, piece):
         # Neither the king nor the rook has previously moved.
         if (piece.King.has_moved == False) and (piece.Rook.has_moved == False):

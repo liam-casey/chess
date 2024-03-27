@@ -9,14 +9,6 @@ class Pawn(Piece):
     def move(self, new_location, is_taking=False):
         d_x = abs(new_location[0] - self.location[0])
         d_y = new_location[1] - self.location[1] # should be positive, cant go back
-
-        # Check if the piece hasn't moved at all
-        # if it hasn't allow a movement forward fo 2 spaces
-        # TODO FIX THIS
-        if self.location == :
-            if d_x != 0 and d_y == 2:
-                self.on_back_rank = False
-                return True
         if is_taking:
             if d_x != 1 or d_y != 1:
                 return False
