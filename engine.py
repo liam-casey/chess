@@ -40,7 +40,7 @@ class GameState:
     def Move(self, startPos, endPos):
         surface = pygame.Surface((200,25))
         surface.fill((255,255,255))
-        self.screen.blit(surface, pygame.Rect(50, 550, 200, 25))
+        self.screen.blit(surface, pygame.Rect(50, 550, 450, 25))
         if startPos[0] > 7 or startPos[1] > 7:
             # HAVE A DRAW STATEMENT FOR INPUTING IN THE RIGHT AREAS
             return
