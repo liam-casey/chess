@@ -7,6 +7,7 @@ from pieces.queen import Queen
 from pieces.king import King
 from pieces.knight import Knight
 from pieces.bishop import Bishop
+from find_check import * 
 
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
 # if a move is valid as well.
@@ -129,6 +130,70 @@ class GameState:
             screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
         for i in range(1, len(self.whiteTaken) + 1):
             screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
+    
+    # checks to see if En Passant is a viable move
+    # TODO: IMPLEMENT THIS FUNCTION
+    def enPassant(self, piece, startPos, endPos):
+        # rules for en passant
+        # the enemy pawn advanced two squares on the previous turn;
+        # the capturing pawn attacks the square that the enemy pawn passed over
+        # Get the piece at the end position
+        takenPiece = self.board.getPiece(endPos)
+        # Check if the piece is a pawn and it's capturing another pawn en passant
+        if isinstance(piece, Pawn) and takenPiece == "":
+            # Check if the end position is a valid en passant capture square
+            if piece.can_en_passant(endPos):
+                # Perform the en passant capture
+                self.board.updateBoard(startPos, endPos)
+                # Remove the captured pawn from the board
+                if piece.get_color() == "white":
+                    self.blackTaken.append(self.board.getPiece((startPos[0], endPos[1])))
+                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                else:
+                    self.whiteTaken.append(self.board.getPiece((startPos[0], endPos[1])))
+                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                return True
+        return False  
+    
+    # checks to see if castling is a viable move
+    # coordinates go y, x in location var
+    # TODO: IMPLEMENT THIS FUNCTION
+    def castle(self, piece, startPos, endPos):
+        # Check if the piece is a king
+        if isinstance(piece, King):
+            # Check if the king hasn't moved
+            if not piece.has_moved:
+                # Check if the end position is to the right of the start position
+                if endPos[1] > startPos[1]:
+                    # Check if there are no pieces between the king and the rook
+                    for col in range(startPos[1] + 1, endPos[1]):
+                        if self.board.getPiece((startPos[0], col)) != "":
+                            return False
+                    # Check if the rook exists at the expected position
+                    rook = self.board.getPiece((startPos[0], 7))
+                    # Check if the rook hasn't moved
+                    if isinstance(rook, Rook) and not rook.has_moved:
+                        # Update the board for the king and rook's new positions
+                        self.board.updateBoard(startPos, endPos)
+                        self.board.updateBoard((startPos[0], 7), (endPos[0], endPos[1] - 1))
+                        return True
+                # Check if the end position is to the left of the start position
+                elif endPos[1] < startPos[1]:
+                    # Check if there are no pieces between the king and the rook
+                    for col in range(endPos[1] + 1, startPos[1]):
+                        if self.board.getPiece((startPos[0], col)) != "":
+                            return False
+                    # Check if the rook exists at the expected position
+                    rook = self.board.getPiece((startPos[0], 0))
+                    # Check if the rook hasn't moved
+                    if isinstance(rook, Rook) and not rook.has_moved:
+                        # Update the board for the king and rook's new positions
+                        self.board.updateBoard(startPos, endPos)
+                        self.board.updateBoard((startPos[0], 0), (endPos[0], endPos[1] + 1))
+                        return True
+        return False
+
+
 
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
@@ -243,7 +308,6 @@ class GameState:
         # Knight can hop over other pieces
         if isinstance(piece, Knight):
             return True 
-
 
     def displayClock(self):
         # if a second has passed and its white's turn, decrement the time
