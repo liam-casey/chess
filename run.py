@@ -61,6 +61,8 @@ def main():
         if time_passed >= 1000:
             gameState.displayClock()
             time_passed = 0
+        if gameState.gameOver:
+            running = False
         # displays everything
         pygame.display.flip()
 

@@ -38,7 +38,7 @@ class GameState:
         self.gameOver = False
     
     def Move(self, startPos, endPos):
-        surface = pygame.Surface((200,25))
+        surface = pygame.Surface((450,25))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 550, 450, 25))
         if startPos[0] > 7 or startPos[1] > 7:
@@ -81,6 +81,8 @@ class GameState:
                 self.whiteToMove = False
                 if takenPiece != "":
                     self.blackTaken.append(takenPiece)
+                if isinstance(takenPiece, King):
+                    self.gameOver = True
                 return
             # else print bad move and return
             else:
@@ -96,6 +98,8 @@ class GameState:
                 self.whiteToMove = True
                 if takenPiece != "":
                     self.whiteTaken.append(takenPiece)
+                if isinstance(takenPiece, King):
+                    self.gameOver = True
                 return
             else:
                 text = self.font.render("This move doesn't work", False, (0,0,0))
