@@ -122,6 +122,7 @@ class GameState:
             screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
     
     # checks to see if En Passant is a viable move
+    # TODO: IMPLEMENT THIS FUNCTION
     def enPassant(self, piece, startPos, endPos):
         # rules for en passant
         # the enemy pawn advanced two squares on the previous turn;
@@ -146,6 +147,7 @@ class GameState:
     
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
+    # TODO: IMPLEMENT THIS FUNCTION
     def castle(self, piece, startPos, endPos):
         # Check if the piece is a king
         if isinstance(piece, King):
