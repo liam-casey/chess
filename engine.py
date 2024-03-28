@@ -42,7 +42,7 @@ class GameState:
     def Move(self, startPos, endPos):
         surface = pygame.Surface((450,25))
         surface.fill((255,255,255))
-        self.screen.blit(surface, pygame.Rect(50, 550, 450, 25))
+        self.screen.blit(surface, pygame.Rect(50, 550, 450, 30))
         if startPos[0] > 7 or startPos[1] > 7:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
@@ -99,14 +99,21 @@ class GameState:
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
+                if self.noMovingIntoCheck(startPos, endPos, "white") != True:
                     # This code makes sure that the rook can't move through pieces
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = False
-                if takenPiece != "":
-                    self.blackTaken.append(takenPiece)
-                if isinstance(takenPiece, King):
-                    self.gameOver = True
-                return
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = False
+                    if takenPiece != "":
+                        self.blackTaken.append(takenPiece)
+                    if self.checkCheck(startPos, endPos, "black"):
+                        print("The black king is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    text = self.font.render("No putting your king in check", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
+                    return
             # else print bad move and return
             else:
                 # then print something out that says its not a good move
@@ -117,13 +124,20 @@ class GameState:
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                self.board.updateBoard(startPos, endPos)
-                self.whiteToMove = True
-                if takenPiece != "":
-                    self.whiteTaken.append(takenPiece)
-                if isinstance(takenPiece, King):
-                    self.gameOver = True
-                return
+                if self.noMovingIntoCheck(startPos, endPos, "black") != True:
+                    self.board.updateBoard(startPos, endPos)
+                    self.whiteToMove = True
+                    if takenPiece != "":
+                        self.whiteTaken.append(takenPiece)
+                    if self.checkCheck(startPos, endPos, "white"):
+                        print("The white king is in check")
+                    if isinstance(takenPiece, King):
+                        self.gameOver = True
+                    return
+                else:
+                    text = self.font.render("No putting your king in check", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
+                    return
             else:
                 text = self.font.render("This move doesn't work", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
@@ -372,22 +386,52 @@ class GameState:
 
     # FUNCTION DOESN'T WORK DUE TO DEEPCOPY NOT WORKING WITH PYGAME METHODS, NEED TO FIND A WORK AROUND LATER
     def checkCheck(self, startPos, endPos, color):
-        copiedGS = copy.deepcopy(self)
-        copiedGS.board.updateBoard(startPos, endPos)
+        surface = pygame.Surface((450,30))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(50, 650, 450, 30))
         for i in range(8):
             for j in range(8):
-                piece = copiedGS.board.getPiece.getPiece(i, j)
-                if piece.color == color and isinstance(piece, King):
-                    kingToCheck = piece
-                    kingLoc = (i,j)
-                    break
+                piece = self.board.getPiece((i, j))
+                if piece != "":
+                    if piece.color == color and isinstance(piece, King):
+                        kingToCheck = piece
+                        kingLoc = (i,j)
+                        break
         for i in range(8):
             for j in range(8):
-                piece = copiedGS.board.getPiece(i,j)
+                piece = self.board.getPiece((i,j))
                 if piece != "":
                     if piece.color != kingToCheck.color:
-                        if piece.move(kingLoc) and copiedGS.noMovingThroughOthers((i,j), kingLoc, piece):
-                            del copiedGS
+                        if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
+                            text = self.font.render("The Black King is Check", False, (0,0,0))
+                            self.screen.blit(text, (50, 650))
                             return True
-        del copiedGS
+        return False
+    
+    def noMovingIntoCheck(self, startPos, endPos, color):
+        movedPiece = self.board.getPiece(startPos)
+        takenPiece = self.board.getPiece(endPos)
+        self.board.updateBoard(startPos, endPos)
+        surface = pygame.Surface((450,30))
+        surface.fill((255,255,255))
+        self.screen.blit(surface, pygame.Rect(50, 550, 450, 30))
+        for i in range(8):
+            for j in range(8):
+                piece = self.board.getPiece((i, j))
+                if piece != "":
+                    if piece.color == color and isinstance(piece, King):
+                        kingToCheck = piece
+                        kingLoc = (i,j)
+                        break
+        for i in range(8):
+            for j in range(8):
+                piece = self.board.getPiece((i,j))
+                if piece != "":
+                    if piece.color != kingToCheck.color:
+                        if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
+                            self.board.board[startPos[0]][startPos[1]] = movedPiece
+                            self.board.board[endPos[0]][endPos[1]] = takenPiece
+                            return True
+        self.board.board[startPos[0]][startPos[1]] = movedPiece
+        self.board.board[endPos[0]][endPos[1]] = takenPiece
         return False
