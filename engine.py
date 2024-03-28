@@ -11,6 +11,8 @@ from find_check import *
 
 
 # TODO: FIND A WAY TO IMPLEMENT CHECK AND CHECKMATE
+# TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
+# TODO: 
 
 
 
@@ -42,10 +44,27 @@ class GameState:
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 550, 450, 25))
         if startPos[0] > 7 or startPos[1] > 7:
-            # HAVE A DRAW STATEMENT FOR INPUTING IN THE RIGHT AREAS
-            return
-        if endPos[0] > 7 or endPos[0] > 7:
-            return
+            if self.whiteToMove:
+                text = self.font.render("It's white's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's white's turn")
+                return
+            else: 
+                text = self.font.render("It's black's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's black's turn")
+                return
+        if endPos[0] > 7 or endPos[1] > 7:
+            if self.whiteToMove:
+                text = self.font.render("It's white's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's white's turn")
+                return
+            else: 
+                text = self.font.render("It's black's turn", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                # print("It's black's turn")
+                return
         if startPos == endPos:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
@@ -67,10 +86,10 @@ class GameState:
             self.screen.blit(text, (50, 550))
             # print("please select a piece to move")
             return
-        if self.enPassant(piece, startPos, endPos):
-            return
-        if self.castle(piece, startPos, endPos):
-            return
+        # if self.enPassant(piece, startPos, endPos):
+        #     return
+        # if self.castle(piece, startPos, endPos):
+        #     return
         # makes sure that the taken piece and the moved piece aren't the same color
         if takenPiece != "":
             if piece.get_color() == takenPiece.get_color():
@@ -130,6 +149,7 @@ class GameState:
     
     # checks to see if En Passant is a viable move
     # TODO: IMPLEMENT THIS FUNCTION
+    # TODO: PAWN DOESN'T HAVE A can_en_passant METHOD
     def enPassant(self, piece, startPos, endPos):
         # rules for en passant
         # the enemy pawn advanced two squares on the previous turn;
@@ -155,6 +175,7 @@ class GameState:
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
     # TODO: IMPLEMENT THIS FUNCTION
+    # TODO: THE ROOK DISAPPEARS FROM THE BOARD, NEED TO FIX
     def castle(self, piece, startPos, endPos):
         # Check if the piece is a king
         if isinstance(piece, King):
