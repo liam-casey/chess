@@ -10,9 +10,8 @@ from pieces.bishop import Bishop
 from find_check import * 
 
 
-# TODO: FIND A WAY TO IMPLEMENT CHECK AND CHECKMATE
+# TODO: FIND A WAY TO IMPLEMENT CHECKMATE
 # TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
-# TODO: 
 
 
 
@@ -381,10 +380,6 @@ class GameState:
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
 
-
-
-
-    # FUNCTION DOESN'T WORK DUE TO DEEPCOPY NOT WORKING WITH PYGAME METHODS, NEED TO FIND A WORK AROUND LATER
     def checkCheck(self, startPos, endPos, color):
         surface = pygame.Surface((450,30))
         surface.fill((255,255,255))
