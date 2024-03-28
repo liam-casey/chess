@@ -36,7 +36,6 @@ class Pawn(Piece):
 
 
         if d_y == direction:
-            print("in dy if statement")
             return True
             
         elif not self.has_moved and d_y == 2 * direction:
