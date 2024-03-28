@@ -9,6 +9,11 @@ from pieces.knight import Knight
 from pieces.bishop import Bishop
 from find_check import * 
 
+
+# TODO: FIND A WAY TO IMPLEMENT CHECK AND CHECKMATE
+
+
+
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
 # if a move is valid as well.
 
@@ -62,6 +67,10 @@ class GameState:
             self.screen.blit(text, (50, 550))
             # print("please select a piece to move")
             return
+        if self.enPassant(piece, startPos, endPos):
+            return
+        if self.castle(piece, startPos, endPos):
+            return
         # makes sure that the taken piece and the moved piece aren't the same color
         if takenPiece != "":
             if piece.get_color() == takenPiece.get_color():
@@ -71,20 +80,14 @@ class GameState:
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                if self.checkCheck(startPos, endPos, "white"):
                     # This code makes sure that the rook can't move through pieces
-                    self.board.updateBoard(startPos, endPos)
-                    self.whiteToMove = False
-                    if takenPiece != "":
-                        self.blackTaken.append(takenPiece)
-                    if self.checkCheck("black"):
-                        print("black is in check")
-                    if isinstance(takenPiece, King):
-                        self.gameOver = True
-                    return
-                else:
-                    print("Cannot put yourself in check")
-                    return
+                self.board.updateBoard(startPos, endPos)
+                self.whiteToMove = False
+                if takenPiece != "":
+                    self.blackTaken.append(takenPiece)
+                if isinstance(takenPiece, King):
+                    self.gameOver = True
+                return
             # else print bad move and return
             else:
                 # then print something out that says its not a good move
@@ -95,19 +98,13 @@ class GameState:
         elif self.whiteToMove == False and piece.get_color() == "black":
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
-                if self.checkCheck(startPos, endPos, "black"):
-                    self.board.updateBoard(startPos, endPos)
-                    self.whiteToMove = True
-                    if takenPiece != "":
-                        self.whiteTaken.append(takenPiece)
-                    if self.checkCheck("white"):
-                        print("white is in check")
-                    if isinstance(takenPiece, King):
-                        self.gameOver = True
-                    return
-                else:
-                    print("Cannot put yourself in check")
-                    return
+                self.board.updateBoard(startPos, endPos)
+                self.whiteToMove = True
+                if takenPiece != "":
+                    self.whiteTaken.append(takenPiece)
+                if isinstance(takenPiece, King):
+                    self.gameOver = True
+                return
             else:
                 text = self.font.render("This move doesn't work", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
@@ -328,7 +325,6 @@ class GameState:
         if self.blackMinutes <=0 and self.blackSeconds <=0:
             self.gameOver = True
             return
-        # TODO: EDIT THIS CODE TO ONLY ERASE THE CHANGING STUFF
         surface = pygame.Surface((100,25))
         surface.fill((255,255,255))
         if self.whiteToMove:
@@ -350,6 +346,10 @@ class GameState:
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
 
+
+
+
+    # FUNCTION DOESN'T WORK DUE TO DEEPCOPY NOT WORKING WITH PYGAME METHODS, NEED TO FIND A WORK AROUND LATER
     def checkCheck(self, startPos, endPos, color):
         copiedGS = copy.deepcopy(self)
         copiedGS.board.updateBoard(startPos, endPos)

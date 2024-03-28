@@ -7,7 +7,7 @@ def find_check(king_pos, king_color, board):
     x = x+1
     while x <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
@@ -15,7 +15,7 @@ def find_check(king_pos, king_color, board):
     x = king_pos[0] - 1
     while x >= 0 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
@@ -26,7 +26,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] + 1
     while y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
@@ -34,7 +34,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] - 1
     while y >= 0 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
@@ -45,7 +45,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] + 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == 'bishop':
             return True
@@ -59,7 +59,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] + 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == 'bishop':
             return True
@@ -73,7 +73,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] - 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == 'bishop':
             return True
@@ -87,7 +87,7 @@ def find_check(king_pos, king_color, board):
     y = king_pos[1] - 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
-        if p is "":
+        if p == "":
             continue
         elif p.piece_type == 'bishop':
             return True
