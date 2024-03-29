@@ -6,6 +6,7 @@ class Pawn(Piece):
         self.on_back_rank = True
         self.has_moved = False
         self.board = board
+        self.movedTwo = False
     def update_location(self, endPos):
         self.location = endPos
         

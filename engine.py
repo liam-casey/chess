@@ -86,8 +86,12 @@ class GameState:
             self.screen.blit(text, (50, 550))
             # print("please select a piece to move")
             return
-        # if self.enPassant(piece, startPos, endPos):
-        #     return
+        if self.enPassant(piece, startPos, endPos):
+            if self.whiteToMove:
+                self.whiteToMove = False
+            else:
+                self.whiteToMove = True
+            return
         if self.castle(piece, startPos, endPos):
             if self.whiteToMove:
                 self.whiteToMove = False
@@ -105,6 +109,10 @@ class GameState:
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 if self.noMovingIntoCheck(startPos, endPos, "white") != True:
                     # This code makes sure that the rook can't move through pieces
+                    if isinstance(piece, Pawn) and abs(endPos[0] - startPos[0]) == 2:
+                        piece.movedTwo = True
+                    elif isinstance(piece, Pawn):
+                        piece.movedTwo = False 
                     self.board.updateBoard(startPos, endPos)
                     self.whiteToMove = False
                     if takenPiece != "":
@@ -129,6 +137,10 @@ class GameState:
             # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 if self.noMovingIntoCheck(startPos, endPos, "black") != True:
+                    if isinstance(piece, Pawn) and abs(endPos[0] - startPos[0]) == 2:
+                        piece.movedTwo = True
+                    elif isinstance(piece, Pawn):
+                        piece.movedTwo = False
                     self.board.updateBoard(startPos, endPos)
                     self.whiteToMove = True
                     if takenPiece != "":
@@ -175,18 +187,27 @@ class GameState:
         # Get the piece at the end position
         takenPiece = self.board.getPiece(endPos)
         # Check if the piece is a pawn and it's capturing another pawn en passant
-        if isinstance(piece, Pawn) and takenPiece == "":
+        if isinstance(piece, Pawn) and takenPiece == "" and abs(startPos[0] - endPos[0]) == 1 and abs(startPos[1] - endPos[1]) == 1:
             # Check if the end position is a valid en passant capture square
-            if piece.can_en_passant(endPos):
+            if piece.movedTwo:
+                print("In enpassant")
                 # Perform the en passant capture
                 self.board.updateBoard(startPos, endPos)
                 # Remove the captured pawn from the board
                 if piece.get_color() == "white":
                     self.blackTaken.append(self.board.getPiece((startPos[0], endPos[1])))
-                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                    self.board.board[endPos[0]][endPos[1]] = piece
+                    piece.update_location(endPos)
+                    self.board.board[startPos[0]][endPos[1]] = ""
+                    piece.movedTwo = False
+                    # self.board.updateBoard(startPos, (startPos[0], endPos[1]))
                 else:
                     self.whiteTaken.append(self.board.getPiece((startPos[0], endPos[1])))
-                    self.board.updateBoard((startPos[0], endPos[1]), "")
+                    self.board.board[endPos[0]][endPos[1]] = piece
+                    piece.update_location(endPos)
+                    self.board.board[startPos[0]][endPos[1]] = ""
+                    piece.movedTwo = False
+                    # self.board.updateBoard(startPos[0], endPos[1])
                 return True
         return False  
     
@@ -211,6 +232,7 @@ class GameState:
                     if isinstance(rook, Rook) and not rook.has_moved:
                         # Update the board for the king and rook's new positions
                         self.board.updateBoard(startPos, endPos)
+                        piece.has_moved = True
                         self.board.board[endPos[0]][endPos[1] - 1] = rook
                         rook.update_location((endPos[0], endPos[1] - 1))
                         rook.has_moved = True
@@ -227,6 +249,7 @@ class GameState:
                     if isinstance(rook, Rook) and not rook.has_moved:
                         # Update the board for the king and rook's new positions
                         self.board.updateBoard(startPos, endPos)
+                        piece.has_moved = True
                         self.board.board[endPos[0]][endPos[1] + 1] = rook
                         rook.update_location((endPos[0], endPos[1] + 1))
                         rook.has_moved = True
