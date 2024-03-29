@@ -8,8 +8,7 @@ class Pawn(Piece):
         self.board = board
     def update_location(self, endPos):
         self.location = endPos
-        self.has_moved = True    
-
+        
     def move(self, new_location):
         d_x = abs(new_location[1] - self.location[1])
         d_y = new_location[0] - self.location[0]

@@ -108,6 +108,7 @@ class GameState:
                         print("The black king is in check")
                     if isinstance(takenPiece, King):
                         self.gameOver = True
+                    piece.has_moved = True
                     return
                 else:
                     text = self.font.render("No putting your king in check", False, (0,0,0))
@@ -132,6 +133,7 @@ class GameState:
                         print("The white king is in check")
                     if isinstance(takenPiece, King):
                         self.gameOver = True
+                    piece.has_moved = True
                     return
                 else:
                     text = self.font.render("No putting your king in check", False, (0,0,0))
@@ -425,8 +427,10 @@ class GameState:
                     if piece.color != kingToCheck.color:
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
                             self.board.board[startPos[0]][startPos[1]] = movedPiece
+                            movedPiece.update_location(startPos)
                             self.board.board[endPos[0]][endPos[1]] = takenPiece
                             return True
         self.board.board[startPos[0]][startPos[1]] = movedPiece
+        movedPiece.update_location(startPos)
         self.board.board[endPos[0]][endPos[1]] = takenPiece
         return False

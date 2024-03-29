@@ -18,4 +18,3 @@ class Bishop(Piece):
    # as the current location
     def update_location(self, endPos):
        self.location = endPos
-       self.has_moved = True
