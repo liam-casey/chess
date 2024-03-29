@@ -12,7 +12,8 @@ from find_check import *
 
 # TODO: FIND A WAY TO IMPLEMENT CHECKMATE
 # TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
-
+# TODO: FINISH IMPLEMENTING EN PASSENT AND CASTLING
+# TODO: SOMETHING IS WRONG IN PAWN
 
 
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
@@ -400,7 +401,7 @@ class GameState:
                 if piece != "":
                     if piece.color != kingToCheck.color:
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
-                            text = self.font.render("The Black King is Check", False, (0,0,0))
+                            text = self.font.render("The " + color + " King is in Check", False, (0,0,0))
                             self.screen.blit(text, (50, 650))
                             return True
         return False
