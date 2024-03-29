@@ -88,8 +88,12 @@ class GameState:
             return
         # if self.enPassant(piece, startPos, endPos):
         #     return
-        # if self.castle(piece, startPos, endPos):
-        #     return
+        if self.castle(piece, startPos, endPos):
+            if self.whiteToMove:
+                self.whiteToMove = False
+            else:
+                self.whiteToMove = True
+            return
         # makes sure that the taken piece and the moved piece aren't the same color
         if takenPiece != "":
             if piece.get_color() == takenPiece.get_color():
