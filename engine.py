@@ -211,7 +211,9 @@ class GameState:
                     if isinstance(rook, Rook) and not rook.has_moved:
                         # Update the board for the king and rook's new positions
                         self.board.updateBoard(startPos, endPos)
-                        self.board.updateBoard((startPos[0], 7), (endPos[0], endPos[1] - 1))
+                        self.board.board[endPos[0]][endPos[1] - 1] = rook
+                        rook.update_location((endPos[0], endPos[1] - 1))
+                        rook.has_moved = True
                         return True
                 # Check if the end position is to the left of the start position
                 elif endPos[1] < startPos[1]:
@@ -225,7 +227,9 @@ class GameState:
                     if isinstance(rook, Rook) and not rook.has_moved:
                         # Update the board for the king and rook's new positions
                         self.board.updateBoard(startPos, endPos)
-                        self.board.updateBoard((startPos[0], 0), (endPos[0], endPos[1] + 1))
+                        self.board.board[endPos[0]][endPos[1] + 1] = rook
+                        rook.update_location((endPos[0], endPos[1] + 1))
+                        rook.has_moved = True
                         return True
         return False
 
