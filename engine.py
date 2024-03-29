@@ -105,8 +105,7 @@ class GameState:
                     self.whiteToMove = False
                     if takenPiece != "":
                         self.blackTaken.append(takenPiece)
-                    if self.checkCheck(startPos, endPos, "black"):
-                        print("The black king is in check")
+                    self.checkCheck(startPos, endPos, "black")
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
@@ -130,8 +129,7 @@ class GameState:
                     self.whiteToMove = True
                     if takenPiece != "":
                         self.whiteTaken.append(takenPiece)
-                    if self.checkCheck(startPos, endPos, "white"):
-                        print("The white king is in check")
+                    self.checkCheck(startPos, endPos, "white")
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
