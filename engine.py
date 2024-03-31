@@ -185,12 +185,12 @@ class GameState:
         # the enemy pawn advanced two squares on the previous turn;
         # the capturing pawn attacks the square that the enemy pawn passed over
         # Get the piece at the end position
-        takenPiece = self.board.getPiece(endPos)
+        newSpot = self.board.getPiece(endPos)
+        takenPiece = self.board.getPiece((startPos[0], endPos[1]))
         # Check if the piece is a pawn and it's capturing another pawn en passant
-        if isinstance(piece, Pawn) and takenPiece == "" and abs(startPos[0] - endPos[0]) == 1 and abs(startPos[1] - endPos[1]) == 1:
+        if isinstance(piece, Pawn) and newSpot == "" and abs(startPos[0] - endPos[0]) == 1 and abs(startPos[1] - endPos[1]) == 1 and isinstance(takenPiece, Pawn):
             # Check if the end position is a valid en passant capture square
             if piece.movedTwo:
-                print("In enpassant")
                 # Perform the en passant capture
                 self.board.updateBoard(startPos, endPos)
                 # Remove the captured pawn from the board
