@@ -14,6 +14,7 @@ class Pawn(Piece):
         d_x = abs(new_location[1] - self.location[1])
         d_y = new_location[0] - self.location[0]
 
+        # white pawn case
         if self.color == "white":
             direction = -1  # White pawns move upwards (positive y direction)
             if d_y == -1 and (d_x == 1 or d_x == -1):
@@ -22,7 +23,7 @@ class Pawn(Piece):
                     return False  
                 elif takenPiece.color != "white":
                     return True
-
+        # black pawn case
         else:
             direction = 1  # Black pawns move downwards (negative y direction)
             if d_y == 1 and (d_x == 1 or d_x == -1):
@@ -37,7 +38,8 @@ class Pawn(Piece):
 
         if d_y == direction:
             return True
-            
+        
+        # allows movement forward two spots    
         elif not self.has_moved and d_y == 2 * direction:
             return True
         else:

@@ -357,13 +357,16 @@ class GameState:
             dx = abs(endPos[1] - startPos[1])
             if dx == 1 and dy == 1:
                 return True
-            if dy > 1:
+            if dy > 1 and piece.get_color() == 'white':
+                if self.board.getPiece((endPos[0] + 1, endPos[1])) != "":
+                    return False
+            elif dy > 1 and piece.get_color() == 'black': 
                 if self.board.getPiece((endPos[0] - 1, endPos[1])) != "":
                     return False
-                if self.board.getPiece((endPos[0], endPos[1])) != "":
-                    return False
-            if self.board.getPiece((endPos[0], endPos[1])) != "":
+            
+            if self.board.getPiece((endPos[0], endPos[1])):
                 return False
+            
             return True
         # King doesn't matter, will be accounted for above in the move function when checking to see it doesn't take its own pieces
         if isinstance(piece, King):
