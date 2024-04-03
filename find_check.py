@@ -1,4 +1,5 @@
 from copy import deepcopy
+from engine import GameState
 def find_check(king_pos, king_color, board):
     x = king_pos[0]
     y = king_pos[1]
@@ -112,7 +113,7 @@ def find_check(king_pos, king_color, board):
 
     return False
 
-def find_checkmate(king_pos, king_color, board):
+def find_checkmate(king_pos, king_color, gs):
     x = king_pos[0]
     y = king_pos[1]
 
@@ -124,14 +125,12 @@ def find_checkmate(king_pos, king_color, board):
     ]
     for pos in possible_os:
         if 0<=pos[0] <= 7 and 0 <= pos[1] <= 7:
-            p = board.getPiece(pos)
+            p = gs.getPiece(pos)
             if p == "":
                 open_spaces.append(pos)
 
     for pos in open_spaces:
-        sim_board = deepcopy(board)
-        sim_board.updateBoard(king_pos, pos)
-        c = find_check(pos, king_color, sim_board)
+        c = gs.noMovingIntoCheck(king_pos, pos, king_color)
         if not c:
             return True
 
