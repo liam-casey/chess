@@ -130,7 +130,7 @@ def find_checkmate(king_pos, king_color, gs):
                 open_spaces.append(pos)
 
     for pos in open_spaces:
-        c = gs.noMovingIntoCheck(king_pos, pos, king_color)
+        c = gs.noMovingIntoCheck(king_pos, (pos[1], pos[0]), king_color)
         if not c:
             return True
 
