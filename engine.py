@@ -16,6 +16,8 @@ from find_check import *
 # TODO: SOMETHING IS WRONG IN PAWN
 
 
+
+
 # This class is responsible for storing all of the information about the current state of the game. It will be resposible for checking
 # if a move is valid as well.
 
@@ -38,6 +40,8 @@ class GameState:
         self.blackTaken = []
         self.font = pygame.font.SysFont('Comic Sans MS', 20)
         self.gameOver = False
+        self.winner = "" # could be black or white
+        self.winCon = "" # could be checkMate or staleMate
     
     def Move(self, startPos, endPos):
         surface = pygame.Surface((450,25))
@@ -117,7 +121,26 @@ class GameState:
                     self.whiteToMove = False
                     if takenPiece != "":
                         self.blackTaken.append(takenPiece)
-                    self.checkCheck(startPos, endPos, "black")
+                    inCheck = self.checkCheck("black")
+                    for i in range(8):
+                        for j in range(8):
+                            piece = self.board.getPiece((i, j))
+                            if piece != "":
+                                if piece.color == "black" and isinstance(piece, King):
+                                    kingToCheck = piece
+                                    kingLoc = (i,j)
+                                    break
+                    inCM = find_checkmate(kingLoc, "black", self)
+                    if inCheck and inCM:
+                        print("game over black in check mate")
+                        self.gameOver = True
+                        self.winner = "black"
+                        self.winCon = "Check Mate"
+                    elif inCM and not inCheck:
+                        print("game over black in stale mate")
+                        self.gameOver = True
+                        self.winner = "black"
+                        self.winCon = "Stale Mate"
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
@@ -145,7 +168,26 @@ class GameState:
                     self.whiteToMove = True
                     if takenPiece != "":
                         self.whiteTaken.append(takenPiece)
-                    self.checkCheck(startPos, endPos, "white")
+                    inCheck = self.checkCheck("white")
+                    for i in range(8):
+                        for j in range(8):
+                            piece = self.board.getPiece((i, j))
+                            if piece != "":
+                                if piece.color == "white" and isinstance(piece, King):
+                                    kingToCheck = piece
+                                    kingLoc = (i,j)
+                                    break
+                    inCM = find_checkmate(kingLoc, "white", self)
+                    if inCheck and inCM:
+                        print("game over white in checkmate")
+                        self.gameOver = True
+                        self.winner = "black"
+                        self.winCon = "Check Mate"
+                    elif inCM and not inCheck:
+                        print("game over white in stale mate")
+                        self.gameOver = True
+                        self.winner = "black"
+                        self.winCon = "Stale Mate"
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
@@ -415,7 +457,7 @@ class GameState:
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
 
-    def checkCheck(self, startPos, endPos, color):
+    def checkCheck(self, color):
         surface = pygame.Surface((450,30))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 650, 450, 30))

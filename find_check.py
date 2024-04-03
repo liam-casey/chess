@@ -1,5 +1,5 @@
 from copy import deepcopy
-from engine import GameState
+# from engine import GameState
 def find_check(king_pos, king_color, board):
     x = king_pos[0]
     y = king_pos[1]
@@ -125,7 +125,7 @@ def find_checkmate(king_pos, king_color, gs):
     ]
     for pos in possible_os:
         if 0<=pos[0] <= 7 and 0 <= pos[1] <= 7:
-            p = gs.getPiece(pos)
+            p = gs.board.getPiece(pos)
             if p == "":
                 open_spaces.append(pos)
 
