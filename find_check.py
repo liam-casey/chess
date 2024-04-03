@@ -1,8 +1,8 @@
 from copy import deepcopy
 # from engine import GameState
 def find_check(king_pos, king_color, board):
-    x = king_pos[0]
-    y = king_pos[1]
+    x = king_pos[1]
+    y = king_pos[0]
 
     # horizontal check (covers queen and rook)
     x = x+1
@@ -13,7 +13,7 @@ def find_check(king_pos, king_color, board):
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
         x += 1
-    x = king_pos[0] - 1
+    x = king_pos[1] - 1
     while x >= 0 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -23,8 +23,8 @@ def find_check(king_pos, king_color, board):
         x -= 1
 
     # vertical check (covers queen and rook)
-    x = king_pos[0]
-    y = king_pos[1] + 1
+    x = king_pos[1]
+    y = king_pos[0] + 1
     while y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -32,7 +32,7 @@ def find_check(king_pos, king_color, board):
         elif p.piece_type == "queen" or p.piece_type == "rook":
             return True
         y += 1
-    y = king_pos[1] - 1
+    y = king_pos[0] - 1
     while y >= 0 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -42,8 +42,8 @@ def find_check(king_pos, king_color, board):
         y -= 1
 
     # diagonal
-    x = king_pos[0] + 1
-    y = king_pos[1] + 1
+    x = king_pos[1] + 1
+    y = king_pos[0] + 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -56,8 +56,8 @@ def find_check(king_pos, king_color, board):
         x += 1
         y += 1
 
-    x = king_pos[0] - 1
-    y = king_pos[1] + 1
+    x = king_pos[1] - 1
+    y = king_pos[0] + 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -70,8 +70,8 @@ def find_check(king_pos, king_color, board):
         x -= 1
         y += 1
 
-    x = king_pos[0] - 1
-    y = king_pos[1] - 1
+    x = king_pos[1] - 1
+    y = king_pos[0] - 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -84,8 +84,8 @@ def find_check(king_pos, king_color, board):
         x -= 1
         y -= 1
 
-    x = king_pos[0] + 1
-    y = king_pos[1] - 1
+    x = king_pos[1] + 1
+    y = king_pos[0] - 1
     while x <= 7 and y <= 7 and board.getPiece([x, y]).color != king_color:
         p = board.getPiece([x, y])
         if p == "":
@@ -98,8 +98,8 @@ def find_check(king_pos, king_color, board):
         x += 1
         y -= 1
 
-    x = king_pos[0]
-    y = king_pos[1]
+    x = king_pos[1]
+    y = king_pos[0]
     # knight check
     knight_check_list = [
         [y + 1, x + 3], [y + 1, x - 3], [y - 1, x + 3], [y - 1, x - 3],
@@ -114,8 +114,8 @@ def find_check(king_pos, king_color, board):
     return False
 
 def find_checkmate(king_pos, king_color, gs):
-    x = king_pos[0]
-    y = king_pos[1]
+    x = king_pos[1]
+    y = king_pos[0]
 
     open_spaces = []
     possible_os = [
