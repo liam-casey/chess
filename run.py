@@ -30,16 +30,37 @@ def main():
     screen.fill(pygame.Color("white"))
     # calls load images
     loadImages()
-    # game state class, keeps track of what how the game looks currently
+    font = pygame.font.SysFont("Comic Sans MS", 30)
+    text = font.render("Welcome to Chess!", False, (0,0,0))
+    screen.blit(text, (220, 50))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(60, 200, 200, 200))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(420, 200, 200, 200))
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                location = pygame.mouse.get_pos()
+                if location[0] > 400:
+                    pass
+        pygame.display.flip()
+
+def runAI(screen, clock):
+    pass
+
+def runTwoPLayer(screen, clock):
     gameState = GameState(IMAGES, screen)
     running = True
     time_passed = 0
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("It's white's turn", False, (0,0,0))
-    screen.blit(text, (50, 550))
-    # TODO: ADD IN A SCREEN THAT WILL DISPLAY 2 OPTIONS, ONE FOR 2 PLAYER, ONE FOR 1 PLAYER
-
-    
+    screen.blit(text, (50, 550))    
     # main driver of game, while loop that keeps the game running
     while running:
         if gameState.gameOver:
@@ -73,7 +94,9 @@ def main():
             running = False
         # displays everything
         pygame.display.flip()
-    # TODO: AFTER GAME IS DONE, DISPLAY WHO WON
+
+def displayWinner(screen, winner, winCon):
+    pass
 
 if __name__ == "__main__":
     main()
