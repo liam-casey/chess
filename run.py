@@ -78,6 +78,7 @@ def runTwoPLayer(screen, clock):
             # checks to see if they closed the window
             if event.type == pygame.QUIT:
                 running = False
+                exit()
             # mouse button down, grab a piece
             if event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos()
@@ -110,7 +111,7 @@ def displayWinner(screen, clock, winner, winCon, typeGame):
     font = pygame.font.SysFont("Comic Sans MS", 30)
     text = winner + " won by " + winCon + "!"
     displayedText = font.render(text, False, (0,0,0))
-    screen.blit(displayedText, (200, 50))
+    screen.blit(displayedText, (180, 50))
     surface = pygame.Surface((200, 200))
     surface.fill((0,0,0))
     screen.blit(surface, pygame.Rect(60, 200, 200, 200))
