@@ -12,8 +12,6 @@ from find_check import *
 
 # TODO: FIND A WAY TO IMPLEMENT CHECKMATE
 # TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
-# TODO: FINISH IMPLEMENTING EN PASSENT AND CASTLING
-# TODO: SOMETHING IS WRONG IN PAWN
 
 
 
@@ -213,6 +211,9 @@ class GameState:
                 # print("It's black's turn")
                 return
     
+    # Displays all of the taken pieces to the side of the board
+    # It takes in a screen and the width of the screen. The screen is used to display the pieces
+    # The width is used to get where each piece should be displayed
     def showTaken(self, screen, WIDTH):
         for i in range(1, len(self.blackTaken) + 1):
             screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
@@ -220,8 +221,6 @@ class GameState:
             screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
     
     # checks to see if En Passant is a viable move
-    # TODO: IMPLEMENT THIS FUNCTION
-    # TODO: PAWN DOESN'T HAVE A can_en_passant METHOD
     def enPassant(self, piece, startPos, endPos):
         # rules for en passant
         # the enemy pawn advanced two squares on the previous turn;
@@ -255,8 +254,6 @@ class GameState:
     
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
-    # TODO: IMPLEMENT THIS FUNCTION
-    # TODO: THE ROOK DISAPPEARS FROM THE BOARD, NEED TO FIX
     def castle(self, piece, startPos, endPos):
         # Check if the piece is a king
         if isinstance(piece, King):
@@ -299,7 +296,11 @@ class GameState:
         return False
 
 
-
+    # This function takes in a startPos and endPos and a piece.
+    # It checks what kind of piece is moving, and then depending on the piece, will check the spots between
+    # The startPos and endPos to make sure that those spaces are empty and can be moved over
+    # The knight and king are the only expceptions
+    # Knight can jump over other pieces and king only moves one spot
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
         if isinstance(piece, Rook):
@@ -417,6 +418,9 @@ class GameState:
         if isinstance(piece, Knight):
             return True 
 
+    # This function is called every second by our main function in run
+    # it decrements the clock depending on whose turn it is
+    # It then displays the new time on the clock
     def displayClock(self):
         # if a second has passed and its white's turn, decrement the time
         if self.whiteToMove:
@@ -457,10 +461,14 @@ class GameState:
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
 
+    # This function takes in a color, finds the king of the corresponding color
+    # It then iterates over the entire board and checks to see if every piece of the opposing color can reach the king in a valid move
     def checkCheck(self, color):
+        # This code clears the bottom space that is used to say that a king is in check
         surface = pygame.Surface((450,30))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 650, 450, 30))
+        # finds the position of the king of the correct color
         for i in range(8):
             for j in range(8):
                 piece = self.board.getPiece((i, j))
@@ -469,24 +477,34 @@ class GameState:
                         kingToCheck = piece
                         kingLoc = (i,j)
                         break
+        # check every piece of the opposing color and see if it can validly move to the kings position
         for i in range(8):
             for j in range(8):
                 piece = self.board.getPiece((i,j))
                 if piece != "":
                     if piece.color != kingToCheck.color:
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
+                            # display that the king is in check
                             text = self.font.render("The " + color + " King is in Check", False, (0,0,0))
                             self.screen.blit(text, (50, 650))
                             return True
+        # king is not in check
         return False
     
+    # This function is very similar to checkCheck except its used before you can make a move
+    # It "does" the move you want, and checks to see if the opposing color can take your king in the same way CheckCheck does
+    # After it checks to see if it puts your king in check, it reverts the changes of the board that it did
     def noMovingIntoCheck(self, startPos, endPos, color):
+        # get the pieces
         movedPiece = self.board.getPiece(startPos)
         takenPiece = self.board.getPiece(endPos)
+        # update the board
         self.board.updateBoard(startPos, endPos)
+        # clear the screen where text for check is displayed
         surface = pygame.Surface((450,30))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 550, 450, 30))
+        # get the position of the king
         for i in range(8):
             for j in range(8):
                 piece = self.board.getPiece((i, j))
@@ -495,16 +513,20 @@ class GameState:
                         kingToCheck = piece
                         kingLoc = (i,j)
                         break
+        # checks to see if the oppsoing color can take the king validly
         for i in range(8):
             for j in range(8):
                 piece = self.board.getPiece((i,j))
                 if piece != "":
                     if piece.color != kingToCheck.color:
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
+                            # reset the board
                             self.board.board[startPos[0]][startPos[1]] = movedPiece
                             movedPiece.update_location(startPos)
+                            # put the taken piece back
                             self.board.board[endPos[0]][endPos[1]] = takenPiece
                             return True
+        # reset the board
         self.board.board[startPos[0]][startPos[1]] = movedPiece
         movedPiece.update_location(startPos)
         self.board.board[endPos[0]][endPos[1]] = takenPiece
