@@ -440,24 +440,29 @@ class GameState:
         if self.blackMinutes <=0 and self.blackSeconds <=0:
             self.gameOver = True
             return
+        # clears the screen at the position of the different clocks
         surface = pygame.Surface((100,25))
         surface.fill((255,255,255))
         if self.whiteToMove:
             self.screen.blit(surface, pygame.Rect(525, 35, 100, 25))
         else:
             self.screen.blit(surface, pygame.Rect(615, 35, 100, 25))
+        # make a string for the white clock
         whiteText = str(self.whiteMinutes) + ":"
         if self.whiteSeconds >= 10:
             whiteText += str(self.whiteSeconds)
         else:
             whiteText = whiteText + "0" + str(self.whiteSeconds)
+        # display the white clock
         text = self.font.render(whiteText, False, (0,0,0))
         self.screen.blit(text, (525, 35))
+        # create the text for the black clock
         blackText = str(self.blackMinutes) + ":"
         if self.blackSeconds >= 10:
             blackText += str(self.blackSeconds)
         else:
             blackText = blackText + "0" + str(self.blackSeconds)
+        # display the black clock
         text = self.font.render(blackText, False, (0,0,0))
         self.screen.blit(text, (615, 35))
 
