@@ -152,6 +152,9 @@ class GameState:
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
+                    # display that it's now black's turn
+                    text = self.font.render("It's black's turn", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
                     return
                 else:
                     # if your move would've put your king in check, return and make another move
@@ -197,6 +200,9 @@ class GameState:
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
+                    # display that it's now white's turn
+                    text = self.font.render("It's white's turn", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
                     return
                 else:
                     text = self.font.render("No putting your king in check", False, (0,0,0))

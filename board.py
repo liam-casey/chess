@@ -90,19 +90,14 @@ class Board:
     
     # updates the 8 by 8 array with the given move
     def updateBoard(self, startPos, endPos):
+        # clear the board
         surface = pygame.Surface((512,512))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(0, 0, 512, 512))
         piece = self.board[startPos[0]][startPos[1]]
         # update pieces position field
         piece.update_location(endPos)
+        # set the startPos to nothing
         self.board[startPos[0]][startPos[1]] = ""
+        # set the endPos to the piece moved
         self.board[endPos[0]][endPos[1]] = piece
-        if piece.get_color() == "white":
-            text = self.font.render("It's black's turn", False, (0,0,0))
-            self.screen.blit(text, (50, 550))
-        else:
-            text = self.font.render("It's white's turn", False, (0,0,0))
-            self.screen.blit(text, (50, 550))
-        
-        
