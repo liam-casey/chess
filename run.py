@@ -30,16 +30,46 @@ def main():
     screen.fill(pygame.Color("white"))
     # calls load images
     loadImages()
-    # game state class, keeps track of what how the game looks currently
+    font = pygame.font.SysFont("Comic Sans MS", 30)
+    text = font.render("Welcome to Chess!", False, (0,0,0))
+    screen.blit(text, (220, 50))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(60, 200, 200, 200))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(420, 200, 200, 200))
+    font = pygame.font.SysFont("Comic Sans MS", 20)
+    text = font.render("VS AI", False, (255, 255, 255))
+    screen.blit(text, (130, 280))
+    text = font.render("VS PLAYER", False, (255, 255, 255))
+    screen.blit(text, (470, 280))
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                location = pygame.mouse.get_pos()
+                if 420 < location[0] and location[0] < 620 and 200 < location[1] and location[1]< 400:
+                    screen.fill((255,255,255))
+                    runTwoPLayer(screen, clock)
+                elif 60< location[0] and location[0] < 260 and  200 < location[1] and location[1] < 400:
+                    screen.fill((255,255,255))
+                    runAI(screen, clock)
+        pygame.display.flip()
+
+def runAI(screen, clock):
+    pass
+    # displayWinner(screen, )
+
+def runTwoPLayer(screen, clock):
     gameState = GameState(IMAGES, screen)
     running = True
     time_passed = 0
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("It's white's turn", False, (0,0,0))
-    screen.blit(text, (50, 550))
-    # TODO: ADD IN A SCREEN THAT WILL DISPLAY 2 OPTIONS, ONE FOR 2 PLAYER, ONE FOR 1 PLAYER
-
-    
+    screen.blit(text, (50, 550))    
     # main driver of game, while loop that keeps the game running
     while running:
         if gameState.gameOver:
@@ -48,6 +78,7 @@ def main():
             # checks to see if they closed the window
             if event.type == pygame.QUIT:
                 running = False
+                exit()
             # mouse button down, grab a piece
             if event.type == pygame.MOUSEBUTTONDOWN:
                 location = pygame.mouse.get_pos()
@@ -73,7 +104,41 @@ def main():
             running = False
         # displays everything
         pygame.display.flip()
-    # TODO: AFTER GAME IS DONE, DISPLAY WHO WON
+    displayWinner(screen, clock, gameState.winner, gameState.winCon, "vs player")
+
+def displayWinner(screen, clock, winner, winCon, typeGame):
+    screen.fill((255,255,255))
+    font = pygame.font.SysFont("Comic Sans MS", 30)
+    text = winner + " won by " + winCon + "!"
+    displayedText = font.render(text, False, (0,0,0))
+    screen.blit(displayedText, (180, 50))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(60, 200, 200, 200))
+    surface = pygame.Surface((200, 200))
+    surface.fill((0,0,0))
+    screen.blit(surface, pygame.Rect(420, 200, 200, 200))
+    font = pygame.font.SysFont("Comic Sans MS", 20)
+    text = font.render("Play Again?", False, (255, 255, 255))
+    screen.blit(text, (110, 280))
+    text = font.render("Exit", False, (255, 255, 255))
+    screen.blit(text, (490, 280))
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                location = pygame.mouse.get_pos()
+                if 420 < location[0] and location[0] < 620 and 200 < location[1] and location[1]< 400:
+                    exit()
+                elif 60< location[0] and location[0] < 260 and  200 < location[1] and location[1] < 400:
+                    screen.fill((255,255,255))
+                    if typeGame == "vs player":
+                        runTwoPLayer(screen, clock)
+                    else:
+                        runAI(screen, clock)
+        pygame.display.flip()
 
 if __name__ == "__main__":
     main()
