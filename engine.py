@@ -132,13 +132,13 @@ class GameState:
                     if inCheck and inCM:
                         print("game over black in check mate")
                         self.gameOver = True
-                        self.winner = "White"
+                        self.winner = "white"
                         self.winCon = "Check Mate"
-                    elif inCM and not inCheck:
-                        print("game over black in stale mate")
-                        self.gameOver = True
-                        self.winner = "White"
-                        self.winCon = "Stale Mate"
+                    # elif inCM and not inCheck:
+                    #     print("game over black in stale mate")
+                    #     self.gameOver = True
+                    #     self.winner = "black"
+                    #     self.winCon = "Stale Mate"
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
@@ -179,13 +179,13 @@ class GameState:
                     if inCheck and inCM:
                         print("game over white in checkmate")
                         self.gameOver = True
-                        self.winner = "Black"
+                        self.winner = "black"
                         self.winCon = "Check Mate"
-                    elif inCM and not inCheck:
-                        print("game over white in stale mate")
-                        self.gameOver = True
-                        self.winner = "Black"
-                        self.winCon = "Stale Mate"
+                    # elif inCM and not inCheck:
+                    #     print("game over white in stale mate")
+                    #     self.gameOver = True
+                    #     self.winner = "black"
+                    #     self.winCon = "Stale Mate"
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
