@@ -130,7 +130,6 @@ def displayWinner(screen, clock, winner, winCon, typeGame):
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
                 location = pygame.mouse.get_pos()
-                print(location)
                 if 420 < location[0] and location[0] < 620 and 200 < location[1] and location[1]< 400:
                     exit()
                 elif 60< location[0] and location[0] < 260 and  200 < location[1] and location[1] < 400:
