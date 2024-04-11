@@ -252,6 +252,51 @@ class GameState:
                 return True
         return False  
     
+    # promotion function the replacement of a pawn with a new piece when the pawn is moved to its last rank
+    # The player replaces the pawn immediately with a queen, rook, bishop, or knight
+    def promotion(self, piece, startPos, endPos, screen):
+        if isinstance(piece, Pawn):
+            if(piece.get_color() == "white" and endPos[0] == 0):
+                text = self.font.render("Select a piece to promote to", False, (0,0,0))
+                self.screen.blit(text, (50, 650))
+                self.screen.blit(Queen, (30, 750))
+                self.screen.blit(Rook, (40, 750))
+                self.screen.blit(Bishop, (50, 750))
+                self.screen.blit(Knight, (60, 750))
+
+                # TODO: replace pawn's space with selected piece
+                
+                # once a piece has been selected replace the pawn with the selected piece
+                if isinstance(piece, Queen):
+                    piece.update_location(endPos)
+                if isinstance(piece, Rook):
+                    piece.update_location(endPos)
+                if isinstance(piece, Bishop):
+                    piece.update_location(endPos)  
+                if isinstance(piece, Knight):
+                    piece.update_location(endPos)  
+            else:
+                text = self.font.render("Select a piece to promote to", False, (0,0,0))
+                self.screen.blit(text, (50, 650))
+                self.screen.blit(Queen, (30, 750))
+                self.screen.blit(Rook, (40, 750))
+                self.screen.blit(Bishop, (50, 750))
+                self.screen.blit(Knight, (60, 750))
+
+                # TODO: replace pawn's space with selected piece
+                
+                # once a piece has been selected replace the pawn with the selected piece
+                if isinstance(piece, Queen):
+                    piece.update_location(endPos)
+                    self.board.updateBoard()
+                if isinstance(piece, Rook):
+                    piece.update_location(endPos)
+                if isinstance(piece, Bishop):
+                    piece.update_location(endPos)  
+                if isinstance(piece, Knight):
+                    piece.update_location(endPos) 
+                
+
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
     def castle(self, piece, startPos, endPos):
