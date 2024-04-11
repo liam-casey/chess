@@ -1,6 +1,6 @@
 import pygame
 from engine import GameState
-
+import random
 
 # constants
 WIDTH = 700
@@ -57,7 +57,12 @@ def main():
 def runAI(screen, clock):
     pass
     # displayWinner(screen, )
-
+def AI():
+    for row in GameState.board:
+        for piece in row:
+            if piece != "" and piece.color == "black":
+                piece.move(piece.self,piece.new_location[random.randint(1,0)])
+                
 def runTwoPLayer(screen, clock):
     gameState = GameState(IMAGES, screen)
     running = True
