@@ -138,7 +138,8 @@ class GameState:
                                     kingLoc = (i,j)
                                     break
                     # check to see if the black king is in checkmate, if so the game is over
-                    inCM = find_checkmate(kingLoc, "black", self)
+                    # inCM = find_checkmate(kingLoc, "black", self)
+                    inCM = self.checkCheckMate("black")
                     if inCheck and inCM:
                         self.gameOver = True
                         self.winner = "white"
@@ -187,7 +188,8 @@ class GameState:
                                     kingToCheck = piece
                                     kingLoc = (i,j)
                                     break
-                    inCM = find_checkmate(kingLoc, "white", self)
+                    # inCM = find_checkmate(kingLoc, "white", self)
+                    inCM = self.checkCheckMate("white")
                     if inCheck and inCM:
                         self.gameOver = True
                         self.winner = "black"
@@ -315,6 +317,11 @@ class GameState:
     # Knight can jump over other pieces and king only moves one spot
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
+        movedPiece = self.board.getPiece(startPos)
+        takenPiece = self.board.getPiece(endPos)
+        if takenPiece != "":
+            if movedPiece.color == takenPiece.color:
+                return False
         if isinstance(piece, Rook):
             dy = abs(endPos[0] - startPos[0])
             dx = abs(endPos[1] - startPos[1])
@@ -532,7 +539,7 @@ class GameState:
             for j in range(8):
                 piece = self.board.getPiece((i,j))
                 if piece != "":
-                    if piece.color != kingToCheck.color:
+                    if piece.color != kingToCheck.get_color():
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
                             # reset the board
                             self.board.board[startPos[0]][startPos[1]] = movedPiece
@@ -545,3 +552,18 @@ class GameState:
         movedPiece.update_location(startPos)
         self.board.board[endPos[0]][endPos[1]] = takenPiece
         return False
+    
+
+    # IDEA
+    def checkCheckMate(self, color):
+        for i in range(8):
+            for j in range(8):
+                piece = self.board.getPiece((i,j))
+                if piece != "":
+                    if piece.get_color() == color:
+                        for x in range(8):
+                            for y in range(8):
+                                if piece.move((x, y)) and self.noMovingThroughOthers((i,j), (x,y), piece): 
+                                    if self.noMovingIntoCheck((i,j), (x,y), color) == False:
+                                        return False
+        return True
