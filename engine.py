@@ -142,7 +142,7 @@ class GameState:
                     inCM = self.checkCheckMate("black")
                     if inCheck and inCM:
                         self.gameOver = True
-                        self.winner = "white"
+                        self.winner = "White"
                         self.winCon = "Check Mate"
                     # elif inCM and not inCheck:
                     #     print("game over black in stale mate")
@@ -192,7 +192,7 @@ class GameState:
                     inCM = self.checkCheckMate("white")
                     if inCheck and inCM:
                         self.gameOver = True
-                        self.winner = "black"
+                        self.winner = "Black"
                         self.winCon = "Check Mate"
                     # elif inCM and not inCheck:
                     #     print("game over white in stale mate")
