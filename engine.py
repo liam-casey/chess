@@ -41,44 +41,44 @@ class GameState:
         self.winner = "" # could be black or white
         self.winCon = "" # could be checkMate or staleMate
     
+    # This function is responsible for determining whether or not a move is valid and also when a move is valid,
+    # then it should carry out the move and update the board.
     def Move(self, startPos, endPos):
+        # clear off the area that displays who's turn it is
         surface = pygame.Surface((450,25))
         surface.fill((255,255,255))
         self.screen.blit(surface, pygame.Rect(50, 550, 450, 30))
+        # if the position is outside of the board, then just return and say it's the same person's turn
         if startPos[0] > 7 or startPos[1] > 7:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's white's turn")
                 return
             else: 
                 text = self.font.render("It's black's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's black's turn")
                 return
+        # if the position is outside of the board, then just return and say it's the same person's turn
         if endPos[0] > 7 or endPos[1] > 7:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's white's turn")
                 return
             else: 
                 text = self.font.render("It's black's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's black's turn")
                 return
+        # if they didn't move the piece, then just return and say it's the same person's turn
         if startPos == endPos:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's white's turn")
                 return
             else: 
                 text = self.font.render("It's black's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's black's turn")
                 return
-        # check to see if the piece is the right color
+        # get the piece at the start position
         piece = self.board.getPiece(startPos)
         # get the piece at the end position
         takenPiece = self.board.getPiece(endPos)
@@ -86,14 +86,15 @@ class GameState:
         if piece == "":
             text = self.font.render('Please Select a piece to move', False, (0,0,0))
             self.screen.blit(text, (50, 550))
-            # print("please select a piece to move")
             return
+        # check to see if the move could be enpassent
         if self.enPassant(piece, startPos, endPos):
             if self.whiteToMove:
                 self.whiteToMove = False
             else:
                 self.whiteToMove = True
             return
+        # checks to see if the move could be castle
         if self.castle(piece, startPos, endPos):
             if self.whiteToMove:
                 self.whiteToMove = False
@@ -108,18 +109,26 @@ class GameState:
                 return
         # if piece is the right color, do the move and update the board, otherwise print something out
         if self.whiteToMove and piece.get_color() == "white":
+            # call each individual pieces move function: this returns whether or not a piece can move from it's current position to the endPos
+            # Then call noMovingThroughOthers which determines if there are no pieces between the startPos and endPos
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
+                # Make sure that the move you make won't put it into check
                 if self.noMovingIntoCheck(startPos, endPos, "white") != True:
-                    # This code makes sure that the rook can't move through pieces
+                    # if a pawn has movedTwo, updated bool in pawn piece: used for enpassent
                     if isinstance(piece, Pawn) and abs(endPos[0] - startPos[0]) == 2:
                         piece.movedTwo = True
                     elif isinstance(piece, Pawn):
                         piece.movedTwo = False 
+                    # update the board with the valid move
                     self.board.updateBoard(startPos, endPos)
+                    # it's now blacks turn
                     self.whiteToMove = False
+                    # if the spot wasn't empty, append the taken piece to the list of taken pieces
                     if takenPiece != "":
                         self.blackTaken.append(takenPiece)
+                    # check to see if the valid move put the black king in check
                     inCheck = self.checkCheck("black")
+                    # find the black king's location
                     for i in range(8):
                         for j in range(8):
                             piece = self.board.getPiece((i, j))
@@ -128,34 +137,38 @@ class GameState:
                                     kingToCheck = piece
                                     kingLoc = (i,j)
                                     break
-                    inCM = find_checkmate(kingLoc, "black", self)
+                    # check to see if the black king is in checkmate, if so the game is over
+                    # inCM = find_checkmate(kingLoc, "black", self)
+                    inCM = self.checkCheckMate("black")
                     if inCheck and inCM:
-                        print("game over black in check mate")
                         self.gameOver = True
-                        self.winner = "white"
+                        self.winner = "White"
                         self.winCon = "Check Mate"
                     # elif inCM and not inCheck:
                     #     print("game over black in stale mate")
                     #     self.gameOver = True
                     #     self.winner = "black"
                     #     self.winCon = "Stale Mate"
+                    # if the takenPiece is the king, the game is over
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
+                    # display that it's now black's turn
+                    text = self.font.render("It's black's turn", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
                     return
                 else:
+                    # if your move would've put your king in check, return and make another move
                     text = self.font.render("No putting your king in check", False, (0,0,0))
                     self.screen.blit(text, (50, 550))
                     return
-            # else print bad move and return
             else:
-                # then print something out that says its not a good move
+                # if the move wasn't valid or you couldn't move through others, display it and make another move
                 text = self.font.render("This move doesn't work", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print ("This move doesn't work")
                 return
+        # Same code as white but for black
         elif self.whiteToMove == False and piece.get_color() == "black":
-            # also update this code to update the pieces position, could do this in board as well.
             if piece.move(endPos) and self.noMovingThroughOthers(startPos, endPos, piece):
                 if self.noMovingIntoCheck(startPos, endPos, "black") != True:
                     if isinstance(piece, Pawn) and abs(endPos[0] - startPos[0]) == 2:
@@ -175,11 +188,11 @@ class GameState:
                                     kingToCheck = piece
                                     kingLoc = (i,j)
                                     break
-                    inCM = find_checkmate(kingLoc, "white", self)
+                    # inCM = find_checkmate(kingLoc, "white", self)
+                    inCM = self.checkCheckMate("white")
                     if inCheck and inCM:
-                        print("game over white in checkmate")
                         self.gameOver = True
-                        self.winner = "black"
+                        self.winner = "Black"
                         self.winCon = "Check Mate"
                     # elif inCM and not inCheck:
                     #     print("game over white in stale mate")
@@ -189,6 +202,9 @@ class GameState:
                     if isinstance(takenPiece, King):
                         self.gameOver = True
                     piece.has_moved = True
+                    # display that it's now white's turn
+                    text = self.font.render("It's white's turn", False, (0,0,0))
+                    self.screen.blit(text, (50, 550))
                     return
                 else:
                     text = self.font.render("No putting your king in check", False, (0,0,0))
@@ -203,12 +219,10 @@ class GameState:
             if self.whiteToMove:
                 text = self.font.render("It's white's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's white's turn")
                 return
             else: 
                 text = self.font.render("It's black's turn", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
-                # print("It's black's turn")
                 return
     
     # Displays all of the taken pieces to the side of the board
@@ -348,6 +362,11 @@ class GameState:
     # Knight can jump over other pieces and king only moves one spot
     def noMovingThroughOthers(self, startPos, endPos, piece):
         # Rook working as intended
+        movedPiece = self.board.getPiece(startPos)
+        takenPiece = self.board.getPiece(endPos)
+        if takenPiece != "":
+            if movedPiece.color == takenPiece.color:
+                return False
         if isinstance(piece, Rook):
             dy = abs(endPos[0] - startPos[0])
             dx = abs(endPos[1] - startPos[1])
@@ -367,7 +386,6 @@ class GameState:
                     count = count + 1
             return True
         
-        # bishop now works
         if isinstance(piece, Bishop):
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
@@ -394,8 +412,7 @@ class GameState:
                 count = count + 1
             return True
 
-        # queen needs to be updated with code from rook
-        # queen also needs to be updated with code from bishop which is now working as intended
+        # queen is just the bishop code and the rook code put together
         if isinstance(piece, Queen):
             dy = abs(startPos[0] - endPos[0])
             dx = startPos[1] - endPos[1]
@@ -438,7 +455,6 @@ class GameState:
                     count = count + 1
                 return True
         
-        # TODO: IMPLEMENT PAWN, NEEDS TO ACCOUNT FOR TAKING
         # Pawn should check the space in front of it or two spaces in front
         if isinstance(piece, Pawn):
             dy = abs(endPos[0] - startPos[0])
@@ -568,7 +584,7 @@ class GameState:
             for j in range(8):
                 piece = self.board.getPiece((i,j))
                 if piece != "":
-                    if piece.color != kingToCheck.color:
+                    if piece.color != kingToCheck.get_color():
                         if piece.move(kingLoc) and self.noMovingThroughOthers((i,j), kingLoc, piece):
                             # reset the board
                             self.board.board[startPos[0]][startPos[1]] = movedPiece
@@ -581,3 +597,18 @@ class GameState:
         movedPiece.update_location(startPos)
         self.board.board[endPos[0]][endPos[1]] = takenPiece
         return False
+    
+
+    # IDEA
+    def checkCheckMate(self, color):
+        for i in range(8):
+            for j in range(8):
+                piece = self.board.getPiece((i,j))
+                if piece != "":
+                    if piece.get_color() == color:
+                        for x in range(8):
+                            for y in range(8):
+                                if piece.move((x, y)) and self.noMovingThroughOthers((i,j), (x,y), piece): 
+                                    if self.noMovingIntoCheck((i,j), (x,y), color) == False:
+                                        return False
+        return True
