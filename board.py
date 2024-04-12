@@ -101,3 +101,13 @@ class Board:
         self.board[startPos[0]][startPos[1]] = ""
         # set the endPos to the piece moved
         self.board[endPos[0]][endPos[1]] = piece
+    
+    def printBoard(self):
+        for row in self.board:
+            rowStr = ""
+            for piece in row:
+                if piece == "":
+                    rowStr += "   "
+                else:
+                    rowStr += " " + piece.piece_type + " "
+            print(rowStr)
