@@ -271,6 +271,8 @@ class GameState:
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
     def castle(self, piece, startPos, endPos):
+        if startPos[0] != endPos[0]:
+            return False
         # Check if the piece is a king
         if isinstance(piece, King):
             # Check if the king hasn't moved
