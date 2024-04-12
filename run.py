@@ -64,6 +64,7 @@ def runAI(screen, clock):
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("It's white's turn", False, (0,0,0))
     screen.blit(text, (50, 550))    
+    moves = []
     # main driver of game, while loop that keeps the game running
     while running:
         if gameState.gameOver:
@@ -86,9 +87,10 @@ def runAI(screen, clock):
                 row = location[1] // SQ_SIZE
                 endPos = (row, col)
                 gameState.Move(startPos, endPos)
-        moves = []
+        # if it's blacks turn, call the AI to do blacks move
         if gameState.whiteToMove==False:
             AI(gameState, time_passed, moves)
+        # afterwards, set the moves that black did back to []
         if gameState.whiteToMove:
             moves = []   
         # draw
@@ -104,21 +106,25 @@ def runAI(screen, clock):
         # displays everything
         pygame.display.flip()
     displayWinner(screen, clock, gameState.winner, gameState.winCon, "vs AI")
-    
-    # displayWinner(screen,)
+
+# This is our AI for black that will do moves
+# it takes in the amount of time passed so that it can generate more randomish moves
+# it also keeps track of all  of the previous moves it tried to do in that turn
 def AI(gameState, time_passed, moves):
-    rand_position1 = (random.randint(0,7)*time_passed)%8
-    rand_position2 = (random.randint(0,20)*time_passed)%8
-    rand_pos = (rand_position1, rand_position2)
-    piece = gameState.board.board[rand_position1][rand_position2]
-    
-    if piece != "" and piece.color == "black":
-        rand_loc = (random.randint(0,7), random.randint(0,7))
-        move = [rand_pos, rand_loc]
-        if move not in moves:
-            gameState.Move(rand_pos, rand_loc)
-            moves.append([(rand_position1, rand_position2), rand_loc])
-        #piece.move(piece.self,piece.new_location[random.randint(1,0)])
+    piece = ""
+    # find a random black piece
+    while piece == "" or piece.color != "black":
+        rand_position1 = (random.randint(0,7)*time_passed)%8
+        rand_position2 = (random.randint(0,20)*time_passed)%8
+        rand_pos = (rand_position1, rand_position2)
+        piece = gameState.board.board[rand_position1][rand_position2]
+    # generate a random move for it
+    rand_loc = (random.randint(0,7), random.randint(0,7))
+    move = [rand_pos, rand_loc]
+    # if it's not in moves, do the move, otherwise, the function will run again
+    if move not in moves:
+        gameState.Move(rand_pos, rand_loc)
+        moves.append([(rand_position1, rand_position2), rand_loc])
                 
                 
 def runTwoPLayer(screen, clock):
