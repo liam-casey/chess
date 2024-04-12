@@ -25,6 +25,7 @@ def main():
     screen.fill(pygame.Color("white"))
     # calls load images
     loadImages()
+    # sets up the homescreen for the chess game
     font = pygame.font.SysFont("Comic Sans MS", 30)
     text = font.render("Welcome to Chess!", False, (0,0,0))
     screen.blit(text, (220, 50))
@@ -33,6 +34,7 @@ def main():
     screen.blit(surface, pygame.Rect(60, 200, 200, 200))
     surface = pygame.Surface((200, 200))
     surface.fill((0,0,0))
+    # buttons for the two different options
     screen.blit(surface, pygame.Rect(420, 200, 200, 200))
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("VS AI", False, (255, 255, 255))
@@ -44,6 +46,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # checks to see if the user clicked inside the buttons
             if event.type == pygame.MOUSEBUTTONUP:
                 location = pygame.mouse.get_pos()
                 if 420 < location[0] and location[0] < 620 and 200 < location[1] and location[1]< 400:
@@ -101,6 +104,8 @@ def runTwoPLayer(screen, clock):
         pygame.display.flip()
     displayWinner(screen, clock, gameState.winner, gameState.winCon, "vs player")
 
+
+# displays the winner of the game and how they won, also gives option to quit or play again
 def displayWinner(screen, clock, winner, winCon, typeGame):
     screen.fill((255,255,255))
     font = pygame.font.SysFont("Comic Sans MS", 30)
@@ -109,6 +114,7 @@ def displayWinner(screen, clock, winner, winCon, typeGame):
     screen.blit(displayedText, (180, 50))
     surface = pygame.Surface((200, 200))
     surface.fill((0,0,0))
+    # set up buttons
     screen.blit(surface, pygame.Rect(60, 200, 200, 200))
     surface = pygame.Surface((200, 200))
     surface.fill((0,0,0))
@@ -123,6 +129,7 @@ def displayWinner(screen, clock, winner, winCon, typeGame):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # checks to see if the player clicked the buttons
             if event.type == pygame.MOUSEBUTTONUP:
                 location = pygame.mouse.get_pos()
                 if 420 < location[0] and location[0] < 620 and 200 < location[1] and location[1]< 400:

@@ -102,12 +102,14 @@ class Board:
         # set the endPos to the piece moved
         self.board[endPos[0]][endPos[1]] = piece
     
+    # prints out the board "nicely" enough so that it's easier to see where pieces are
     def printBoard(self):
         for row in self.board:
             rowStr = ""
             for piece in row:
                 if piece == "":
-                    rowStr += "   "
+                    # xx will be a placeholder for the blank spots
+                    rowStr += " " + "xx" + " "
                 else:
                     rowStr += " " + piece.piece_type + " "
             print(rowStr)
