@@ -7,7 +7,12 @@ from pieces.knight import Knight
 from pieces.bishop import Bishop
 
 class Board:     
-    def __init__(self, images, screen):    
+    def __init__(self, images, screen): 
+        # top left = 0,0
+        # bottom left = 7,0
+        # top right = 0,7
+        # bottom right = 7,7
+           
         # intialize all of pieces with the pieces in the pieces folder
         self.IMAGES = images
         self.font = pygame.font.SysFont("Comic Sans MS", 20)
@@ -62,6 +67,8 @@ class Board:
             [white_pawn1, white_pawn2, white_pawn3, white_pawn4, white_pawn5, white_pawn6, white_pawn7, white_pawn8],
             [white_rook1, white_knight1, white_bishop1, white_queen, white_king, white_bishop2, white_knight2, white_rook2]
             ]
+        
+
 
     # This function draws the board given the screen and screen size
     def drawBoard(self, screen, screen_size):
