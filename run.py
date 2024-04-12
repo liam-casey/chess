@@ -83,8 +83,11 @@ def runAI(screen, clock):
                 row = location[1] // SQ_SIZE
                 endPos = (row, col)
                 gameState.Move(startPos, endPos)
+        moves = []
         if gameState.whiteToMove==False:
-            AI(gameState, time_passed)    
+            AI(gameState, time_passed, moves)
+        if gameState.whiteToMove:
+            moves = []   
         # draw
         gameState.board.drawBoard(screen, SQ_SIZE)
         gameState.showTaken(screen, WIDTH)
@@ -100,13 +103,18 @@ def runAI(screen, clock):
     displayWinner(screen, clock, gameState.winner, gameState.winCon, "vs AI")
     
     # displayWinner(screen,)
-def AI(gameState, time_passed):
+def AI(gameState, time_passed, moves):
     rand_position1 = (random.randint(0,7)*time_passed)%8
     rand_position2 = (random.randint(0,20)*time_passed)%8
+    rand_pos = (rand_position1, rand_position2)
     piece = gameState.board.board[rand_position1][rand_position2]
     
     if piece != "" and piece.color == "black":
-        gameState.Move((rand_position1, rand_position2), (random.randint(0,7),  random.randint(0,7)))
+        rand_loc = (random.randint(0,7), random.randint(0,7))
+        move = [rand_pos, rand_loc]
+        if move not in moves:
+            gameState.Move(rand_pos, rand_loc)
+            moves.append([(rand_position1, rand_position2), rand_loc])
         #piece.move(piece.self,piece.new_location[random.randint(1,0)])
                 
                 
