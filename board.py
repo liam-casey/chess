@@ -51,20 +51,20 @@ class Board:
         white_pawn5 = Pawn((6, 4), self.IMAGES["white_pawn"], "white",self)
         white_pawn6 = Pawn((6, 5), self.IMAGES["white_pawn"], "white",self)
         white_pawn7 = Pawn((6, 6), self.IMAGES["white_pawn"], "white",self)
-        white_pawn8 = Pawn((1, 7), self.IMAGES["white_pawn"], "white",self)
+        white_pawn8 = Pawn((6, 7), self.IMAGES["white_pawn"], "white",self)
 
         # This is used for testing to make sure all pieces are working properly
         # white_rook3 = Rook((5,4), self.IMAGES["white_rook"], "white")
         # white_queen2 = Queen((4,4), self.IMAGES["white_queen"], "white")
 
         self.board = [
-            [black_rook1, black_knight1, black_bishop1, black_queen, black_king, black_bishop2, black_knight2, ""],
-            [black_pawn1, black_pawn2, black_pawn3, black_pawn4, black_pawn5, black_pawn6, black_pawn7, white_pawn8],
+            [black_rook1, black_knight1, black_bishop1, black_queen, black_king, black_bishop2, black_knight2, black_rook2],
+            [black_pawn1, black_pawn2, black_pawn3, black_pawn4, black_pawn5, black_pawn6, black_pawn7, black_pawn8],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
             ["", "", "", "", "", "", "", ""],
-            [white_pawn1, white_pawn2, white_pawn3, white_pawn4, white_pawn5, white_pawn6, white_pawn7, ""],
+            [white_pawn1, white_pawn2, white_pawn3, white_pawn4, white_pawn5, white_pawn6, white_pawn7, white_pawn8],
             [white_rook1, white_knight1, white_bishop1, white_queen, white_king, white_bishop2, white_knight2, white_rook2]
             ]
         

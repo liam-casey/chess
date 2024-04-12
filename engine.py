@@ -120,11 +120,14 @@ class GameState:
                         piece.movedTwo = True
                     elif isinstance(piece, Pawn):
                         piece.movedTwo = False 
+                
                     # update the board with the valid move
                     self.board.updateBoard(startPos, endPos)
+
+                    # TODO MAYBE MOVE THIS AROUND
+                    if isinstance(piece, Pawn):
+                        self.promotion(piece, endPos)
                     
-                    # TODO FIX THIS
-                    self.promotion(piece, endPos)
                     # it's now blacks turn
                     self.whiteToMove = False
                     # if the spot wasn't empty, append the taken piece to the list of taken pieces
@@ -179,7 +182,12 @@ class GameState:
                         piece.movedTwo = True
                     elif isinstance(piece, Pawn):
                         piece.movedTwo = False
+                        
                     self.board.updateBoard(startPos, endPos)
+                    # TODO MOVE THIS AROUND MAYBE?
+                    if isinstance(piece, Pawn) and endPos[0] == 7:
+                        self.promotion(piece, endPos)
+                    
                     self.whiteToMove = True
                     if takenPiece != "":
                         self.whiteTaken.append(takenPiece)
@@ -281,27 +289,26 @@ class GameState:
                 text = self.font.render("Select a piece to promote to", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
                 self.screen.blit(self.images['white_queen'], pygame.Rect(50, 600, 512/16, 512/16))
-                self.screen.blit(self.images['white_rook'], pygame.Rect(100, 600, 512/16, 512/16))
-                self.screen.blit(self.images['white_bishop'], pygame.Rect(150, 600, 512/16, 512/16))
-                self.screen.blit(self.images['white_knight'], pygame.Rect(200, 600, 512/16, 512/16))
-                print('before pygame')
-                # TODO: replace pawn's space with selected piece
+                self.screen.blit(self.images['white_rook'], pygame.Rect(125, 600, 512/16, 512/16))
+                self.screen.blit(self.images['white_bishop'], pygame.Rect(200, 600, 512/16, 512/16))
+                self.screen.blit(self.images['white_knight'], pygame.Rect(275, 600, 512/16, 512/16))
+
                 running = True
                 while running:
                     for event in pygame.event.get():
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             location = pygame.mouse.get_pos()
-                            if location[0] > 50 and location[0] < 82 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
                                 print('queen')
                                 chosen = 'queen'
                                 running = False
-                            if location[0] > 100 and location[0] < 132 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
                                 chosen = 'rook'
                                 running = False
-                            if location[0] > 150 and location[0] < 182 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 211 and location[0] < 252 and location[1] > 600 and location[1] < 650:
                                 chosen = 'bishop'
                                 running = False
-                            if location[0] > 200 and location[0] < 232 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
                                 chosen = 'knight'
                                 running = False
                             print('end pygame')
@@ -314,38 +321,39 @@ class GameState:
                     pygame.display.flip()
                 # once a piece has been selected replace the pawn with the selected piece
                 if chosen == 'queen':
-                    piece = Queen(endPos, self.images["white_queen"], 'white')
+                    self.board.board[endPos[0]][endPos[1]] = Queen(endPos, self.images["white_queen"], 'white')
                 if chosen == 'rook':
-                    piece = Rook(endPos, self.images["white_rook"], 'white')
+                    self.board.board[endPos[0]][endPos[1]] = Rook(endPos, self.images["white_rook"], 'white')
                 if chosen == 'bishop':
-                    piece = Bishop(endPos, self.images["white_bishop"], 'white')  
+                    self.board.board[endPos[0]][endPos[1]] = Bishop(endPos, self.images["white_bishop"], 'white')  
                 if chosen == 'knight':
-                    piece = Knight(endPos, self.images["white_knight"], 'white')  
-                print(self.board.board)
+                    self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["white_knight"], 'white')  
                 self.board.drawBoard(self.screen, 64)
-            else:
+                pygame.display.flip()
+            elif(piece.get_color() == "black" and endPos[0] == 7):
                 text = self.font.render("Select a piece to promote to", False, (0,0,0))
                 self.screen.blit(text, (50, 550))
                 self.screen.blit(self.images['black_queen'], pygame.Rect(50, 600, 512/16, 512/16))
-                self.screen.blit(self.images['black_rook'], pygame.Rect(100, 600, 512/16, 512/16))
-                self.screen.blit(self.images['black_bishop'], pygame.Rect(150, 600, 512/16, 512/16))
-                self.screen.blit(self.images['black_knight'], pygame.Rect(200, 600, 512/16, 512/16))
-                # TODO: replace pawn's space with selected piece
+                self.screen.blit(self.images['black_rook'], pygame.Rect(125, 600, 512/16, 512/16))
+                self.screen.blit(self.images['black_bishop'], pygame.Rect(200, 600, 512/16, 512/16))
+                self.screen.blit(self.images['black_knight'], pygame.Rect(275, 600, 512/16, 512/16))
+
                 running = True
                 while running:
                     for event in pygame.event.get():
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             location = pygame.mouse.get_pos()
-                            if location[0] > 50 and location[0] < 82 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
+                                print('queen')
                                 chosen = 'queen'
                                 running = False
-                            if location[0] > 100 and location[0] < 132 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
                                 chosen = 'rook'
                                 running = False
-                            if location[0] > 150 and location[0] < 182 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 211 and location[0] < 252 and location[1] > 600 and location[1] < 650:
                                 chosen = 'bishop'
                                 running = False
-                            if location[0] > 200 and location[0] < 232 and location[1] > 600 and location[1] < 632:
+                            if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
                                 chosen = 'knight'
                                 running = False
                             print('end pygame')
@@ -358,15 +366,19 @@ class GameState:
                     pygame.display.flip()
                 # once a piece has been selected replace the pawn with the selected piece
                 if chosen == 'queen':
-                    piece = Queen(endPos, self.images["black_queen"], 'black')
+                    self.board.board[endPos[0]][endPos[1]] = Queen(endPos, self.images["black_queen"], 'black')
                 if chosen == 'rook':
-                    piece = Rook(endPos, self.images["black_rook"], 'black')
+                    self.board.board[endPos[0]][endPos[1]] = Rook(endPos, self.images["black_rook"], 'black')
                 if chosen == 'bishop':
-                    piece = Bishop(endPos, self.images["black_bishop"], 'black')  
+                    self.board.board[endPos[0]][endPos[1]] = Bishop(endPos, self.images["black_bishop"], 'black')  
                 if chosen == 'knight':
-                    piece = Knight(endPos, self.images["black_knight"], 'black')  
-                print(self.board.board)
+                    self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["black_knight"], 'black')  
                 self.board.drawBoard(self.screen, 64)
+                surface = pygame.Surface((450,25))
+                surface.fill((255,255,255))
+                # 
+                self.screen.blit(surface, pygame.Rect(600, 450, 30))
+                pygame.display.flip()
                 
 
     # checks to see if castling is a viable move
