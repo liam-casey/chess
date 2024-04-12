@@ -256,6 +256,8 @@ class GameState:
         # Get the piece at the end position
         newSpot = self.board.getPiece(endPos)
         takenPiece = self.board.getPiece((startPos[0], endPos[1]))
+        if piece.color == takenPiece.color:
+            return False
         # Check if the piece is a pawn and it's capturing another pawn en passant
         if isinstance(piece, Pawn) and newSpot == "" and abs(startPos[0] - endPos[0]) == 1 and abs(startPos[1] - endPos[1]) == 1 and isinstance(takenPiece, Pawn):
             # Check if the end position is a valid en passant capture square
