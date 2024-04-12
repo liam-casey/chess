@@ -131,10 +131,10 @@ class GameState:
                     # find the black king's location
                     for i in range(8):
                         for j in range(8):
-                            piece = self.board.getPiece((i, j))
-                            if piece != "":
+                            newPiece = self.board.getPiece((i, j))
+                            if newPiece != "":
                                 if piece.color == "black" and isinstance(piece, King):
-                                    kingToCheck = piece
+                                    kingToCheck = newPiece
                                     kingLoc = (i,j)
                                     break
                     # check to see if the black king is in checkmate, if so the game is over
@@ -156,6 +156,7 @@ class GameState:
                     # display that it's now black's turn
                     text = self.font.render("It's black's turn", False, (0,0,0))
                     self.screen.blit(text, (50, 550))
+                    # print(self.board.printBoard())
                     return
                 else:
                     # if your move would've put your king in check, return and make another move
@@ -182,10 +183,10 @@ class GameState:
                     inCheck = self.checkCheck("white")
                     for i in range(8):
                         for j in range(8):
-                            piece = self.board.getPiece((i, j))
-                            if piece != "":
+                            newPiece = self.board.getPiece((i, j))
+                            if newPiece != "":
                                 if piece.color == "white" and isinstance(piece, King):
-                                    kingToCheck = piece
+                                    kingToCheck = newPiece
                                     kingLoc = (i,j)
                                     break
                     # inCM = find_checkmate(kingLoc, "white", self)
@@ -205,6 +206,7 @@ class GameState:
                     # display that it's now white's turn
                     text = self.font.render("It's white's turn", False, (0,0,0))
                     self.screen.blit(text, (50, 550))
+                    # print(self.board.printBoard())
                     return
                 else:
                     text = self.font.render("No putting your king in check", False, (0,0,0))
