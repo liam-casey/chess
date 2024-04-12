@@ -55,13 +55,60 @@ def main():
         pygame.display.flip()
 
 def runAI(screen, clock):
-    pass
-    # displayWinner(screen, )
-def AI():
-    for row in GameState.board:
-        for piece in row:
-            if piece != "" and piece.color == "black":
-                piece.move(piece.self,piece.new_location[random.randint(1,0)])
+    gameState = GameState(IMAGES, screen)
+    running = True
+    time_passed = 0
+    font = pygame.font.SysFont("Comic Sans MS", 20)
+    text = font.render("It's white's turn", False, (0,0,0))
+    screen.blit(text, (50, 550))    
+    # main driver of game, while loop that keeps the game running
+    while running:
+        if gameState.gameOver:
+            running = False
+        for event in pygame.event.get():
+            # checks to see if they closed the window
+            if event.type == pygame.QUIT:
+                running = False
+                exit()
+            # mouse button down, grab a piece
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                location = pygame.mouse.get_pos()
+                col = location[0]// SQ_SIZE
+                row = location[1] // SQ_SIZE
+                startPos = (row, col)
+            # mouse button up, move the piece to new destination
+            if event.type == pygame.MOUSEBUTTONUP:
+                location = pygame.mouse.get_pos()
+                col = location[0]// SQ_SIZE
+                row = location[1] // SQ_SIZE
+                endPos = (row, col)
+                gameState.Move(startPos, endPos)
+        if gameState.whiteToMove==False:
+            AI(gameState, time_passed)    
+        # draw
+        gameState.board.drawBoard(screen, SQ_SIZE)
+        gameState.showTaken(screen, WIDTH)
+        # frame rate
+        time_passed += clock.tick(MAX_FPS)
+        if time_passed >= 1000:
+            gameState.displayClock()
+            time_passed = 0
+        if gameState.gameOver:
+            running = False
+        # displays everything
+        pygame.display.flip()
+    displayWinner(screen, clock, gameState.winner, gameState.winCon, "vs AI")
+    
+    # displayWinner(screen,)
+def AI(gameState, time_passed):
+    rand_position1 = (random.randint(0,7)*time_passed)%8
+    rand_position2 = (random.randint(0,20)*time_passed)%8
+    piece = gameState.board.board[rand_position1][rand_position2]
+    
+    if piece != "" and piece.color == "black":
+        gameState.Move((rand_position1, rand_position2), (random.randint(0,7),  random.randint(0,7)))
+        #piece.move(piece.self,piece.new_location[random.randint(1,0)])
+                
                 
 def runTwoPLayer(screen, clock):
     gameState = GameState(IMAGES, screen)
