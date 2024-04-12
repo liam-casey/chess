@@ -273,6 +273,9 @@ class GameState:
     def castle(self, piece, startPos, endPos):
         if startPos[0] != endPos[0]:
             return False
+        endPiece = self.board.getPiece(endPos)
+        if isinstance(endPiece, Rook) == False:
+            return False
         # Check if the piece is a king
         if isinstance(piece, King):
             # Check if the king hasn't moved
