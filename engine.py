@@ -286,7 +286,7 @@ class GameState:
     # The player replaces the pawn immediately with a queen, rook, bishop, or knight
     def promotion(self, piece, endPos):
         clock = pygame.time.Clock()
-        print('start of promotion')
+        # print('start of promotion')
         time_passed = 0
         if isinstance(piece, Pawn):
             if(piece.get_color() == "white" and endPos[0] == 0):
@@ -333,6 +333,9 @@ class GameState:
                 if chosen == 'knight':
                     self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["white_knight"], 'white')  
                 self.board.drawBoard(self.screen, 64)
+                surface = pygame.Surface((400,50))
+                surface.fill((255,255,255))
+                self.screen.blit(surface, pygame.Rect(50, 600, 400, 50))
                 pygame.display.flip()
             elif(piece.get_color() == "black" and endPos[0] == 7):
                 text = self.font.render("Select a piece to promote to", False, (0,0,0))
@@ -378,10 +381,9 @@ class GameState:
                 if chosen == 'knight':
                     self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["black_knight"], 'black')  
                 self.board.drawBoard(self.screen, 64)
-                surface = pygame.Surface((450,25))
+                surface = pygame.Surface((400,50))
                 surface.fill((255,255,255))
-                # 
-                self.screen.blit(surface, pygame.Rect(600, 450, 30))
+                self.screen.blit(surface, pygame.Rect(50, 600, 400, 50))
                 pygame.display.flip()
                 
 
