@@ -9,7 +9,7 @@ from pieces.knight import Knight
 from pieces.bishop import Bishop
 from find_check import * 
 
-
+MAX_FPS = 60
 # TODO: FIND A WAY TO IMPLEMENT CHECKMATE
 # TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
 
@@ -25,6 +25,7 @@ class GameState:
     def __init__(self, images, screen):
         # this creates a starting board, the "" are empty spaces
         self.board = Board(images, screen)
+        self.images = images
         self.screen = screen
         # white goes first
         self.whiteToMove = True
@@ -119,8 +120,14 @@ class GameState:
                         piece.movedTwo = True
                     elif isinstance(piece, Pawn):
                         piece.movedTwo = False 
+                
                     # update the board with the valid move
                     self.board.updateBoard(startPos, endPos)
+
+                    # TODO MAYBE MOVE THIS AROUND
+                    if isinstance(piece, Pawn):
+                        self.promotion(piece, endPos)
+                    
                     # it's now blacks turn
                     self.whiteToMove = False
                     # if the spot wasn't empty, append the taken piece to the list of taken pieces
@@ -176,7 +183,12 @@ class GameState:
                         piece.movedTwo = True
                     elif isinstance(piece, Pawn):
                         piece.movedTwo = False
+                        
                     self.board.updateBoard(startPos, endPos)
+                    # TODO MOVE THIS AROUND MAYBE?
+                    if isinstance(piece, Pawn) and endPos[0] == 7:
+                        self.promotion(piece, endPos)
+                    
                     self.whiteToMove = True
                     if takenPiece != "":
                         self.whiteTaken.append(takenPiece)
@@ -268,6 +280,109 @@ class GameState:
                 return True
         return False  
     
+    # promotion function the replacement of a pawn with a new piece when the pawn is moved to its last rank
+    # The player replaces the pawn immediately with a queen, rook, bishop, or knight
+    def promotion(self, piece, endPos):
+        clock = pygame.time.Clock()
+        print('start of promotion')
+        time_passed = 0
+        if isinstance(piece, Pawn):
+            if(piece.get_color() == "white" and endPos[0] == 0):
+                text = self.font.render("Select a piece to promote to", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                self.screen.blit(self.images['white_queen'], pygame.Rect(50, 600, 512/16, 512/16))
+                self.screen.blit(self.images['white_rook'], pygame.Rect(125, 600, 512/16, 512/16))
+                self.screen.blit(self.images['white_bishop'], pygame.Rect(200, 600, 512/16, 512/16))
+                self.screen.blit(self.images['white_knight'], pygame.Rect(275, 600, 512/16, 512/16))
+
+                running = True
+                while running:
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            location = pygame.mouse.get_pos()
+                            if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
+                                print('queen')
+                                chosen = 'queen'
+                                running = False
+                            if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
+                                chosen = 'rook'
+                                running = False
+                            if location[0] > 211 and location[0] < 252 and location[1] > 600 and location[1] < 650:
+                                chosen = 'bishop'
+                                running = False
+                            if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
+                                chosen = 'knight'
+                                running = False
+                            print('end pygame')
+                    self.board.drawBoard(self.screen, 64)
+                    time_passed += clock.tick(MAX_FPS)
+                    if time_passed >= 1000:
+                        self.displayClock()
+                        time_passed = 0
+                    
+                    pygame.display.flip()
+                # once a piece has been selected replace the pawn with the selected piece
+                if chosen == 'queen':
+                    self.board.board[endPos[0]][endPos[1]] = Queen(endPos, self.images["white_queen"], 'white')
+                if chosen == 'rook':
+                    self.board.board[endPos[0]][endPos[1]] = Rook(endPos, self.images["white_rook"], 'white')
+                if chosen == 'bishop':
+                    self.board.board[endPos[0]][endPos[1]] = Bishop(endPos, self.images["white_bishop"], 'white')  
+                if chosen == 'knight':
+                    self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["white_knight"], 'white')  
+                self.board.drawBoard(self.screen, 64)
+                pygame.display.flip()
+            elif(piece.get_color() == "black" and endPos[0] == 7):
+                text = self.font.render("Select a piece to promote to", False, (0,0,0))
+                self.screen.blit(text, (50, 550))
+                self.screen.blit(self.images['black_queen'], pygame.Rect(50, 600, 512/16, 512/16))
+                self.screen.blit(self.images['black_rook'], pygame.Rect(125, 600, 512/16, 512/16))
+                self.screen.blit(self.images['black_bishop'], pygame.Rect(200, 600, 512/16, 512/16))
+                self.screen.blit(self.images['black_knight'], pygame.Rect(275, 600, 512/16, 512/16))
+
+                running = True
+                while running:
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            location = pygame.mouse.get_pos()
+                            if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
+                                print('queen')
+                                chosen = 'queen'
+                                running = False
+                            if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
+                                chosen = 'rook'
+                                running = False
+                            if location[0] > 211 and location[0] < 252 and location[1] > 600 and location[1] < 650:
+                                chosen = 'bishop'
+                                running = False
+                            if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
+                                chosen = 'knight'
+                                running = False
+                            print('end pygame')
+                    self.board.drawBoard(self.screen, 64)
+                    time_passed += clock.tick(MAX_FPS)
+                    if time_passed >= 1000:
+                        self.displayClock()
+                        time_passed = 0
+                    
+                    pygame.display.flip()
+                # once a piece has been selected replace the pawn with the selected piece
+                if chosen == 'queen':
+                    self.board.board[endPos[0]][endPos[1]] = Queen(endPos, self.images["black_queen"], 'black')
+                if chosen == 'rook':
+                    self.board.board[endPos[0]][endPos[1]] = Rook(endPos, self.images["black_rook"], 'black')
+                if chosen == 'bishop':
+                    self.board.board[endPos[0]][endPos[1]] = Bishop(endPos, self.images["black_bishop"], 'black')  
+                if chosen == 'knight':
+                    self.board.board[endPos[0]][endPos[1]] = Knight(endPos, self.images["black_knight"], 'black')  
+                self.board.drawBoard(self.screen, 64)
+                surface = pygame.Surface((450,25))
+                surface.fill((255,255,255))
+                # 
+                self.screen.blit(surface, pygame.Rect(600, 450, 30))
+                pygame.display.flip()
+                
+
     # checks to see if castling is a viable move
     # coordinates go y, x in location var
     def castle(self, piece, startPos, endPos):
