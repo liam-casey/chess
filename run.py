@@ -4,7 +4,7 @@ import numpy as np
 
 # constants
 WIDTH = 700
-HEIGHT = 700 # size of window
+HEIGHT = 800 # size of window
 DIMENSION = 8 # size of board
 SQ_SIZE = 512 // DIMENSION # size of each square
 MAX_FPS = 60 # max frames per second
@@ -63,7 +63,6 @@ def runAI(screen, clock):
     time_passed = 0
     font = pygame.font.SysFont("Comic Sans MS", 20)
     text = font.render("It's white's turn", False, (0,0,0))
-    count = 0
     screen.blit(text, (50, 550))    
     moves = []
     # main driver of game, while loop that keeps the game running
@@ -90,8 +89,7 @@ def runAI(screen, clock):
                 gameState.Move(startPos, endPos)
         # if it's blacks turn, call the AI to do blacks move
         if gameState.whiteToMove==False:
-            count = AI(gameState, time_passed, moves, count)
-            print(count)
+            AI(gameState, moves)
         # afterwards, set the moves that black did back to []
         if gameState.whiteToMove:
             moves = []   
@@ -112,25 +110,21 @@ def runAI(screen, clock):
 # This is our AI for black that will do moves
 # it takes in the amount of time passed so that it can generate more randomish moves
 # it also keeps track of all  of the previous moves it tried to do in that turn
-def AI(gameState, time_passed, moves, count):
-    # np.random.seed(time_passed)
+def AI(gameState, moves):
     piece = ""
     # find a random black piece
     while piece == "" or piece.color != "black":
         rand_position1 = np.random.randint(8)
         rand_position2 = np.random.randint(8)
-        count = count + 2
         rand_pos = (rand_position1, rand_position2)
         piece = gameState.board.board[rand_position1][rand_position2]
     # generate a random move for it
     rand_loc = (np.random.randint(8), np.random.randint(8))
-    count = count + 2
     move = [rand_pos, rand_loc]
     # if it's not in moves, do the move, otherwise, the function will run again
     if move not in moves:
         gameState.Move(rand_pos, rand_loc)
         moves.append([(rand_position1, rand_position2), rand_loc])
-    return count
                 
                 
 def runTwoPLayer(screen, clock):

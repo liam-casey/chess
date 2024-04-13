@@ -244,9 +244,9 @@ class GameState:
     # The width is used to get where each piece should be displayed
     def showTaken(self, screen, WIDTH):
         for i in range(1, len(self.blackTaken) + 1):
-            screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
+            screen.blit(self.blackTaken[i - 1].get_image(), pygame.Rect(525, i * (WIDTH/15 + 5), WIDTH/35, WIDTH/35))
         for i in range(1, len(self.whiteTaken) + 1):
-            screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/16, WIDTH/16))
+            screen.blit(self.whiteTaken[i - 1].get_image(), pygame.Rect(615, i * (WIDTH/15 + 5), WIDTH/35, WIDTH/35))
     
     # checks to see if En Passant is a viable move
     def enPassant(self, piece, startPos, endPos):
@@ -303,7 +303,6 @@ class GameState:
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             location = pygame.mouse.get_pos()
                             if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
-                                print('queen')
                                 chosen = 'queen'
                                 running = False
                             if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
@@ -315,7 +314,6 @@ class GameState:
                             if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
                                 chosen = 'knight'
                                 running = False
-                            print('end pygame')
                     self.board.drawBoard(self.screen, 64)
                     time_passed += clock.tick(MAX_FPS)
                     if time_passed >= 1000:
@@ -351,7 +349,6 @@ class GameState:
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             location = pygame.mouse.get_pos()
                             if location[0] > 50 and location[0] < 105 and location[1] > 600 and location[1] < 650:
-                                print('queen')
                                 chosen = 'queen'
                                 running = False
                             if location[0] > 140 and location[0] < 175 and location[1] > 600 and location[1] < 650:
@@ -363,7 +360,6 @@ class GameState:
                             if location[0] > 280 and location[0] < 325 and location[1] > 600 and location[1] < 650:
                                 chosen = 'knight'
                                 running = False
-                            print('end pygame')
                     self.board.drawBoard(self.screen, 64)
                     time_passed += clock.tick(MAX_FPS)
                     if time_passed >= 1000:
