@@ -4,7 +4,7 @@ import numpy as np
 
 # constants
 WIDTH = 700
-HEIGHT = 800 # size of window
+HEIGHT = 700 # size of window
 DIMENSION = 8 # size of board
 SQ_SIZE = 512 // DIMENSION # size of each square
 MAX_FPS = 60 # max frames per second

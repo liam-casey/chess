@@ -10,8 +10,6 @@ from pieces.bishop import Bishop
 from find_check import * 
 
 MAX_FPS = 60
-# TODO: FIND A WAY TO IMPLEMENT CHECKMATE
-# TODO: Implement an AI - Maybe in here, maybe in run, not sure yet
 
 
 
@@ -676,7 +674,8 @@ class GameState:
         return False
     
 
-    # IDEA
+    # This moves every piece of the coresponding color to every square on the board to check if it there are any avaliable moves
+    # if there are no moves that can be done, it's checkmate
     def checkCheckMate(self, color):
         for i in range(8):
             for j in range(8):
